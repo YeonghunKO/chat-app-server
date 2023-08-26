@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "npm run build:live",
-    "build:live": "nodemon --watch '*.ts' --exec 'ts-node' index.ts"
+    "build:live": "nodemon --watch '*.ts' --exec 'ts-node' index.ts",
+    "prismaDeploy": "prisma migrate dev && prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^4.14.0",

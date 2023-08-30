@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import AuthRoutes from "./routes/AuthRoutes";
 import cookieParser from "cookie-parser";
+import errorHandle from "./utils/errorHandle";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use(cookieParser());
 // api/auth가 base url이고 AuthRoutes안에 지정된 path가 sub path이다
 app.use("/api/auth", AuthRoutes);
 
+app.use(errorHandle);
 const server = app.listen(process.env.PORT, () => {
   console.log(`server is listening to ${process.env.PORT}`);
 });

@@ -2,7 +2,7 @@
   "scripts": {
     "start": "npm run build:live",
     "build:live": "nodemon --watch '*.ts' --exec 'ts-node' index.ts",
-    "prismaDeploy": "prisma migrate dev --name whats-app && prisma generate",
+    "dbPush": "prisma migrate dev --name whats-app && prisma generate",
     "studio": "prisma studio"
   },
   "dependencies": {

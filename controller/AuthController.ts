@@ -28,9 +28,6 @@ export const refresh = async (
     )[1];
     const userEmail = req.headers.refreshtokenidx as string;
 
-    console.log("accessTokenFromHeader", accessTokenFromHeader);
-    console.log("refreshTokenFromHeader", userEmail);
-
     if (!accessTokenFromHeader || !userEmail) {
       return res.status(401).json({
         message: "access token and refresh token should be inside headers",
@@ -54,17 +51,11 @@ export const refresh = async (
       });
     }
 
-    const userInfo = user;
-
     const {
       email: accessEmail,
       ok: accessOk,
       message: accessMessage,
     } = verifyAccess(accessTokenFromHeader);
-
-    console.log("accessEmail", accessEmail);
-    console.log("accessOk", accessOk);
-    console.log("accessMessage", accessMessage);
 
     const {
       email: refreshEmail,
@@ -76,7 +67,12 @@ export const refresh = async (
       return res.status(201).json({
         ok: true,
         message: "access token is still valid",
-        userInfo,
+        user: {
+          email: user.email,
+          name: user.name,
+          profilePicture: user.profilePicture,
+          about: user.about,
+        },
       });
     }
 
@@ -86,11 +82,16 @@ export const refresh = async (
       accessMessage === JWT.EXPIRED
     ) {
       const newAccessToken = signAccess(userEmail);
-      res.cookie(COOKIE.ACCESS_TOKEN, newAccessToken, { httpOnly: true });
+
       return res.status(201).json({
         accessToken: newAccessToken,
         message: "new access token created",
-        userInfo,
+        user: {
+          email: user.email,
+          name: user.name,
+          profilePicture: user.profilePicture,
+          about: user.about,
+        },
       });
     }
 
@@ -101,19 +102,6 @@ export const refresh = async (
         redirctDestination: "/login",
       });
     }
-
-    // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Inloa28xOTg4QGdtYWlsLmNvbSIsImlhdCI6MTY5MzQwMDY4MiwiZXhwIjoxNjkzNDAwNzQyfQ.s93YcPIJTeuGhvoQm4egYV4eHNYCcIevDZ_5RkXz6Ds
-
-    console.log("refreshEmail", refreshEmail);
-    console.log("refreshOk", refreshOk);
-    console.log("refreshMessage", refreshMessage);
-
-    // const refreshToken
-
-    // console.log("cookie", cookies);
-
-    return res.status(201).send("ok");
-    // if()
   } catch (error) {
     next(error);
   }
@@ -178,9 +166,10 @@ export const signIn = async (
 
     return res.status(201).json({
       user: {
-        email,
-        name,
-        profilePicture,
+        email: user.email,
+        name: user.name,
+        profilePicture: user.profilePicture,
+        about: user.about,
       },
     });
   } catch (error) {

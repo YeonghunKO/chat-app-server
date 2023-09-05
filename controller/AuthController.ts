@@ -28,6 +28,7 @@ export const refresh = async (
     )[1];
     const userEmail = req.headers.refreshtokenidx as string;
 
+    // 헤더 검증
     if (!accessTokenFromHeader || !userEmail) {
       return res.status(401).json({
         message: "access token and refresh token should be inside headers",
@@ -43,6 +44,7 @@ export const refresh = async (
       },
     });
 
+    // db user검증
     if (!user) {
       return res.status(401).json({
         ok: false,
@@ -51,6 +53,7 @@ export const refresh = async (
       });
     }
 
+    // token 검증
     const {
       email: accessEmail,
       ok: accessOk,
@@ -63,6 +66,7 @@ export const refresh = async (
       message: refreshMessage,
     } = await verifyRefresh(userEmail);
 
+    // accessToken 유효한지 검증
     if (accessOk && accessMessage !== JWT.EXPIRED) {
       return res.status(201).json({
         ok: true,
@@ -95,6 +99,7 @@ export const refresh = async (
       });
     }
 
+    // refreshToken 유효한지 검증
     if (refreshMessage === JWT.EXPIRED && accessMessage === JWT.EXPIRED) {
       return res.status(401).json({
         ok: false,
@@ -218,6 +223,82 @@ export const onSignUpUser = async (
         name,
         profilePicture,
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUserInfo = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const email = req.params.email;
+    const prisma = getPrismaInstance();
+
+    const userInfo = await prisma.user.findUnique({ where: { email } });
+    if (!userInfo) {
+      return res.status(401).json({
+        ok: false,
+        message: "user not found",
+      });
+    }
+
+    return res.status(201).json({
+      email: userInfo.email,
+      about: userInfo.about,
+      profilePicture: userInfo.profilePicture,
+      name: userInfo.name,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const prisma = getPrismaInstance();
+    const allUsers = await prisma.user.findMany({
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        profilePicture: true,
+        name: true,
+        about: true,
+        email: true,
+      },
+    });
+
+    const usersGroupedByInitLetter: Record<
+      string,
+      {
+        id: number;
+        profilePicture: string;
+        name: string;
+        about: string;
+        email: string;
+      }[]
+    > = {};
+
+    allUsers.forEach((user) => {
+      const firstLetter = user.name.charAt(0).toUpperCase();
+      if (usersGroupedByInitLetter[firstLetter]) {
+        usersGroupedByInitLetter[firstLetter].push(user);
+      } else {
+        usersGroupedByInitLetter[firstLetter] = [];
+
+        usersGroupedByInitLetter[firstLetter].push(user);
+      }
+    });
+
+    return res.status(201).json({
+      users: usersGroupedByInitLetter,
     });
   } catch (error) {
     next(error);

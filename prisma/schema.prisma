@@ -13,12 +13,14 @@ datasource db {
 model User {
   id Int @id @default(autoincrement())
 
-  email          String        @unique
-  password       String        @default("")
-  name           String        @default("")
-  profilePicture String        @default("")
-  about          String        @default("")
-  refreshToken   RefreshToken?
+  email           String        @unique
+  password        String        @default("")
+  name            String        @default("")
+  profilePicture  String        @default("")
+  about           String        @default("")
+  refreshToken    RefreshToken?
+  sentMessage     Messages[]    @relation("sentMessage")
+  recievedMessage Messages[]    @relation("recievedMessage")
 }
 
 model RefreshToken {
@@ -26,4 +28,18 @@ model RefreshToken {
   value  String @unique
   User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int    @unique
+}
+
+model Messages {
+  id         Int      @id @default(autoincrement())
+  // https://www.prisma.io/docs/concepts/components/prisma-schema/relations#disambiguating-relations
+  // 같은 model이 두개 있을 경우 name arg를 추가해줌으로써 명확하게 relation을 정의할 수 있다.
+  sender     User     @relation("sentMessage", fields: [senderId], references: [id])
+  senderId   Int
+  reciever   User     @relation("recievedMessage", fields: [recieverId], references: [id])
+  recieverId Int
+  message    String
+  type       String   @default("text")
+  status     String   @default("sent")
+  createdAt  DateTime @default(now())
 }

@@ -7,10 +7,17 @@ const errorHandle = (
 ) => {
   console.error("err", error);
 
-  return res.status(503).json({
-    error,
-    message: `서버에 문제가 발생했습니다. 에러 코드${error.code}`,
-  });
+  if (error.code) {
+    return res.status(503).json({
+      error,
+      message: `서버에 문제가 발생했습니다. 에러 코드 ${error.code}`,
+    });
+  } else {
+    return res.status(503).json({
+      error,
+      message: `서버에 문제가 발생했습니다. 서버 로그를 확인해주세요`,
+    });
+  }
 };
 
 export default errorHandle;

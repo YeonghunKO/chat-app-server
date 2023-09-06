@@ -1,3 +1,5 @@
+import { Request, Response, NextFunction } from "express";
+
 import { COOKIE, JWT } from "../constant/cookie";
 import {
   signAccess,
@@ -5,9 +7,8 @@ import {
   verifyAccess,
   verifyRefresh,
 } from "../middleware/jwtAuth";
-import getPrismaInstance from "../utils/PrismaClient";
 
-import { Request, Response, NextFunction } from "express";
+import getPrismaInstance from "../utils/PrismaClient";
 
 /**
  * 1. cookie에 refreshToken과 accessToken이 없을때

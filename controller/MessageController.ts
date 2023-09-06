@@ -1,5 +1,3 @@
-import getPrismaInstance from "../utils/PrismaClient";
-
 import { Request, Response, NextFunction } from "express";
 
 export const getMessages = (

@@ -2,14 +2,67 @@ import { Request, Response, NextFunction } from "express";
 import getPrismaInstance from "../utils/PrismaClient";
 import { onlineUser } from "../utils/onlineUser";
 
-export const getMessages = (
+export const getMessages = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  return res.status(201).json({
-    messages: ["message from server"],
-  });
+  try {
+    const { from, to } = req.params;
+    const primsa = getPrismaInstance();
+
+    if (from && to) {
+      // 내가 짝하마에게 보낸 메시지와 , 짝하마가 나한테 보낸 메시지 전부가 리턴됨.
+      // 즉, 나와 상대방이 나눈 대화 전체를 불러온다.
+      const messages = await primsa.messages.findMany({
+        where: {
+          OR: [
+            {
+              senderId: parseInt(from),
+              recieverId: parseInt(to),
+            },
+            {
+              senderId: parseInt(to),
+              recieverId: parseInt(from),
+            },
+          ],
+        },
+      });
+
+      const unReadMessages: number[] = [];
+      // 내가 메시지를 불러올때 그 중에서 상대방이 나에게 보낸 메시지에 read 표시를 하고
+      messages.forEach((message, index) => {
+        const isRead = message.status === "read";
+        const isMessageFromReciever = message.senderId === parseInt(to);
+        if (isMessageFromReciever && !isRead) {
+          console.log("update");
+
+          message.status = "read";
+          unReadMessages.push(message.id);
+        }
+      });
+
+      // 실제 db에서 까지, 안읽은 메시지들 다 read로 업데이트
+      await primsa.messages.updateMany({
+        where: {
+          id: { in: unReadMessages },
+        },
+        data: {
+          status: "read",
+        },
+      });
+
+      return res.status(201).json({
+        messages,
+      });
+    } else {
+      return res.status(401).json({
+        message: "from and to are required",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const addMessage = async (
@@ -48,6 +101,10 @@ export const addMessage = async (
       });
 
       return res.status(201).json({ message: newMessage });
+    } else {
+      return res.status(401).json({
+        message: "from and to are required",
+      });
     }
   } catch (error) {
     next(error);

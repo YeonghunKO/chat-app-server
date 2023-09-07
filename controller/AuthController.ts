@@ -73,6 +73,7 @@ export const refresh = async (
         ok: true,
         message: "access token is still valid",
         user: {
+          id: user.id,
           email: user.email,
           name: user.name,
           profilePicture: user.profilePicture,
@@ -92,6 +93,7 @@ export const refresh = async (
         accessToken: newAccessToken,
         message: "new access token created",
         user: {
+          id: user.id,
           email: user.email,
           name: user.name,
           profilePicture: user.profilePicture,
@@ -248,6 +250,7 @@ export const getUserInfo = async (
     }
 
     return res.status(201).json({
+      id: userInfo.id,
       email: userInfo.email,
       about: userInfo.about,
       profilePicture: userInfo.profilePicture,

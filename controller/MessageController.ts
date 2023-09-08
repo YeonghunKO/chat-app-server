@@ -35,8 +35,6 @@ export const getMessages = async (
         const isRead = message.status === "read";
         const isMessageFromReciever = message.senderId === parseInt(to);
         if (isMessageFromReciever && !isRead) {
-          console.log("update");
-
           message.status = "read";
           unReadMessages.push(message.id);
         }
@@ -80,7 +78,7 @@ export const addMessage = async (
     const { from, to, message } = req.body;
     const prisma = getPrismaInstance();
 
-    const isUser = onlineUser.get(to);
+    const isUser = onlineUser.isUserLoggedIn(to);
 
     if (from && to && message) {
       const newMessage = await prisma.messages.create({

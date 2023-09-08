@@ -5,7 +5,7 @@ const refreshSecret = process.env.SCRETE_REFRESH as string;
 
 export const signAccess = (email: string) => {
   return jwt.sign({ email }, accessSecret, {
-    expiresIn: "1m",
+    expiresIn: "30m",
   });
 };
 
@@ -25,7 +25,7 @@ export const verifyAccess = (token: string) => {
 };
 
 export const signRefresh = (email: string) => {
-  return jwt.sign({ email }, refreshSecret, { expiresIn: "5m" });
+  return jwt.sign({ email }, refreshSecret, { expiresIn: "1h" });
 };
 
 export const verifyRefresh = async (email: string) => {

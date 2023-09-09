@@ -11,7 +11,7 @@ export const getMessages = async (
     const { from, to } = req.params;
     const primsa = getPrismaInstance();
 
-    if (from && to) {
+    if (to !== "undefined" && from !== "undefined") {
       // 내가 짝하마에게 보낸 메시지와 , 짝하마가 나한테 보낸 메시지 전부가 리턴됨.
       // 즉, 나와 상대방이 나눈 대화 전체를 불러온다.
       const messages = await primsa.messages.findMany({

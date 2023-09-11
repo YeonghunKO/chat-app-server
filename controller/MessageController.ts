@@ -92,10 +92,6 @@ export const addMessage = async (
             connect: { id: parseInt(to) },
           },
         },
-        include: {
-          reciever: true,
-          sender: true,
-        },
       });
 
       return res.status(201).json({ message: newMessage });

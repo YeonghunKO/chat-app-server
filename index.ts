@@ -59,6 +59,8 @@ io.on("connection", (socket) => {
 
       if (recievedUserLoggedIn) {
         const socketIdByUserId = onlineUser.getSocketIdByUserId(data.to);
+
+        // priviate room 을 만들려면 socketId를 to에 pass하면 됨.
         socket.to(socketIdByUserId).emit("recieve-msg", {
           from: data.from,
           to: data.to,

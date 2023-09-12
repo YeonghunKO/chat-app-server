@@ -50,9 +50,7 @@ export const getMessages = async (
         },
       });
 
-      return res.status(201).json({
-        messages,
-      });
+      return res.status(201).json(messages);
     } else {
       return res.status(401).json({
         message: "from and to are required",
@@ -94,7 +92,7 @@ export const addMessage = async (
         },
       });
 
-      return res.status(201).json({ message: newMessage });
+      return res.status(201).json(newMessage);
     } else {
       return res.status(401).json({
         message: "from and to are required",

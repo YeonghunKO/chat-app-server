@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import getPrismaInstance from "../utils/PrismaClient";
-import { onlineUser } from "../utils/onlineUser";
+import { onlineUsers } from "../utils/onlineUser";
 
 export const getMessages = async (
   req: Request,
@@ -26,6 +26,9 @@ export const getMessages = async (
               recieverId: parseInt(from),
             },
           ],
+        },
+        orderBy: {
+          createdAt: "asc",
         },
       });
 
@@ -74,9 +77,13 @@ export const addMessage = async (
 
   try {
     const { from, to, message } = req.body;
+    console.log("from", from);
+    console.log("to", to);
+    console.log("message", message);
+
     const prisma = getPrismaInstance();
 
-    const isUser = onlineUser.isUserLoggedIn(to);
+    const isUser = onlineUsers.isUserLoggedIn(to);
 
     if (from && to && message) {
       const newMessage = await prisma.messages.create({

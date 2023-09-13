@@ -10,7 +10,7 @@ import AuthRoutes from "./routes/AuthRoutes";
 import MessageRoutes from "./routes/MessageRoutes";
 
 import errorHandle from "./utils/errorHandle";
-import { onlineUser } from "./utils/onlineUser";
+import { onlineUsers } from "./utils/onlineUser";
 
 dotenv.config();
 
@@ -46,7 +46,7 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   socket.on("add-user", (userId: number) => {
     if (userId) {
-      onlineUser.setUserBySocketId(userId, socket.id);
+      onlineUsers.setUserBySocketId(userId, socket.id);
     }
   });
 
@@ -55,10 +55,10 @@ io.on("connection", (socket) => {
   socket.on(
     "send-msg",
     (data: { to: number; from: number; message: string }) => {
-      const recievedUserLoggedIn = onlineUser.isUserLoggedIn(data.to);
+      const recievedUserLoggedIn = onlineUsers.isUserLoggedIn(data.to);
 
       if (recievedUserLoggedIn) {
-        const socketIdByUserId = onlineUser.getSocketIdByUserId(data.to);
+        const socketIdByUserId = onlineUsers.getSocketIdByUserId(data.to);
 
         // priviate room 을 만들려면 socketId를 to에 pass하면 됨.
         socket.to(socketIdByUserId).emit("recieve-msg", {

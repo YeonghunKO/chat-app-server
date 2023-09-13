@@ -5,24 +5,24 @@ interface IOnlineUser {
 }
 
 class OnlineUser implements IOnlineUser {
-  private onlineUser: Map<any, any>;
+  private onlineUsers: Map<any, any>;
   constructor() {
-    this.onlineUser = new Map();
+    this.onlineUsers = new Map();
   }
 
   isUserLoggedIn(userId: number) {
-    return !!this.onlineUser.get(userId);
+    return !!this.onlineUsers.get(userId);
   }
 
   getSocketIdByUserId(userId: number) {
-    return this.onlineUser.get(userId);
+    return this.onlineUsers.get(userId);
   }
 
   setUserBySocketId(userId: number, socketId: string) {
-    this.onlineUser.set(userId, socketId);
+    this.onlineUsers.set(userId, socketId);
   }
 }
 
-const onlineUser = new OnlineUser();
+const onlineUsers = new OnlineUser();
 
-export { onlineUser };
+export { onlineUsers };

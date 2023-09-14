@@ -10,7 +10,7 @@ import AuthRoutes from "./routes/AuthRoutes";
 import MessageRoutes from "./routes/MessageRoutes";
 
 import errorHandle from "./utils/errorHandle";
-import { onlineUsers } from "./utils/onlineUser";
+import { TOnlineUser, onlineUsers } from "./utils/onlineUser";
 
 dotenv.config();
 
@@ -46,9 +46,21 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   socket.on("add-user", (userId: number) => {
     if (userId) {
-      onlineUsers.setUserBySocketId(userId, socket.id);
+      onlineUsers.setSocketIdByUserId(userId, socket.id);
     }
   });
+
+  socket.on(
+    "set-onlineUsers",
+    ({ userId, value }: { userId: number; value: TOnlineUser }) => {
+      onlineUsers.setUserValueById({ userId, value });
+
+      // send to all clients
+      io.emit("get-onlineUsers", {
+        onlineUsers: JSON.stringify([...onlineUsers.onlineUsersData]),
+      });
+    }
+  );
 
   // client에서 send-msg 보낸것을 서버에서 받은다음 다시 서버에서 클라이언트로 recieve-msg를 전송한다.
   // 그럼 client에서 recieve-msg를 받는다.
@@ -56,10 +68,11 @@ io.on("connection", (socket) => {
     "send-msg",
     (data: { to: number; from: number; message: string }) => {
       const recievedUserLoggedIn = onlineUsers.isUserLoggedIn(data.to);
+      console.log("recievedUserLoggedIn", recievedUserLoggedIn);
+      console.log("onlineusers", onlineUsers.onlineUsersData);
 
-      if (recievedUserLoggedIn) {
-        const socketIdByUserId = onlineUsers.getSocketIdByUserId(data.to);
-
+      const socketIdByUserId = onlineUsers.getSocketIdByUserId(data.to);
+      if (recievedUserLoggedIn && socketIdByUserId) {
         // priviate room 을 만들려면 socketId를 to에 pass하면 됨.
         socket.to(socketIdByUserId).emit("recieve-msg", {
           from: data.from,

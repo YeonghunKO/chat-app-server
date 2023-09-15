@@ -77,19 +77,21 @@ export const addMessage = async (
 
   try {
     const { from, to, message } = req.body;
-    console.log("from", from);
-    console.log("to", to);
-    console.log("message", message);
 
     const prisma = getPrismaInstance();
 
     const isUser = onlineUsers.isUserLoggedIn(to);
+    const isUserSameRoomWithTo = from === onlineUsers.getChatRoomIdByUserId(to);
 
     if (from && to && message) {
       const newMessage = await prisma.messages.create({
         data: {
           message: message,
-          status: isUser ? "delivered" : "sent",
+          status: isUser
+            ? isUserSameRoomWithTo
+              ? "read"
+              : "delivered"
+            : "sent",
           sender: {
             connect: { id: parseInt(from) },
           },

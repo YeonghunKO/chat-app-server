@@ -104,7 +104,7 @@ export const addMessage = async (
       return res.status(201).json(newMessage);
     } else {
       return res.status(401).json({
-        message: "from and to are required",
+        message: "sender, reciever and message are required",
       });
     }
   } catch (error) {

@@ -68,8 +68,6 @@ io.on("connection", (socket) => {
     "send-msg",
     (data: { to: number; from: number; message: string }) => {
       const recievedUserLoggedIn = onlineUsers.isUserLoggedIn(data.to);
-      console.log("recievedUserLoggedIn", recievedUserLoggedIn);
-      console.log("onlineusers", onlineUsers.onlineUsersData);
 
       const socketIdByUserId = onlineUsers.getSocketIdByUserId(data.to);
       if (recievedUserLoggedIn && socketIdByUserId) {

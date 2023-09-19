@@ -162,3 +162,14 @@ export const addImageMessage = async (
     next(error);
   }
 };
+
+export const addAudioMessage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+};

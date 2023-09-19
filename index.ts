@@ -31,6 +31,7 @@ app.use(cookieParser());
 // 이제부터 host/uploads/images/파일이름 경로로 요청하면 여기 안에 있는 정적파일을 클라이언트로 넘겨준다는 말임.
 
 app.use("/uploads/images", express.static("uploads/images"));
+app.use("/uploads/recordings", express.static("uploads/recordings"));
 
 // api/auth가 base url이고 AuthRoutes안에 지정된 path가 sub path이다
 app.use("/api/auth", AuthRoutes);

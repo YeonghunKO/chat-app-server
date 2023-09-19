@@ -27,6 +27,11 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+// static 파일을 css,image,js파일을 그대로 서빙한다는 말임
+// 이제부터 host/uploads/images/파일이름 경로로 요청하면 여기 안에 있는 정적파일을 클라이언트로 넘겨준다는 말임.
+
+app.use("/uploads/images", express.static("uploads/images"));
+
 // api/auth가 base url이고 AuthRoutes안에 지정된 path가 sub path이다
 app.use("/api/auth", AuthRoutes);
 app.use("/api/message", MessageRoutes);

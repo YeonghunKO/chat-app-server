@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import getPrismaInstance from "../utils/PrismaClient";
 import { onlineUsers } from "../utils/onlineUser";
+import { renameSync } from "fs";
 
 export const getMessages = async (
   req: Request,
@@ -107,6 +108,56 @@ export const addMessage = async (
         message: "sender, reciever and message are required",
       });
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const addImageMessage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const date = Date.now();
+    let fileName = "uploads/images/" + date + req.file?.originalname;
+
+    // uploads/images에 있는 파일은 binary로 되어있다.
+    // binary파일 끝에 originalname을 이용해서 png/svg/jpg 같은 확장자가 붙은 이름으로 교체한다.
+    renameSync(req.file?.path as string, fileName);
+
+    const { from, to } = req.query as { from: string; to: string };
+
+    if (from && to) {
+      const parsedFrom = parseInt(from);
+      const parsedTo = parseInt(to);
+      const prisma = getPrismaInstance();
+      const isUser = onlineUsers.isUserLoggedIn(parsedTo);
+
+      const isUserSameRoomWithTo =
+        parsedFrom === onlineUsers.getChatRoomIdByUserId(parsedTo);
+
+      const newMessage = await prisma.messages.create({
+        data: {
+          message: fileName,
+          status: isUser
+            ? isUserSameRoomWithTo
+              ? "read"
+              : "delivered"
+            : "sent",
+          type: "image",
+          sender: {
+            connect: { id: parseInt(from) },
+          },
+          reciever: {
+            connect: { id: parseInt(to) },
+          },
+        },
+      });
+
+      return res.status(201).json(newMessage);
+    }
+    return res.status(401).json({ message: "from and to are required" });
   } catch (error) {
     next(error);
   }

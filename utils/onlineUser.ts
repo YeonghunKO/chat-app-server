@@ -63,6 +63,11 @@ class OnlineUser implements IOnlineUser {
         ...this.onlineUsers.get(userId),
         ...value,
       });
+    } else {
+      this.onlineUsers.set(userId, {
+        chatRoomId: value.chatRoomId,
+        socketId: value.socketId,
+      });
     }
   }
 }

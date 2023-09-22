@@ -52,7 +52,13 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   socket.on("add-user", (userId: number) => {
     if (userId) {
-      onlineUsers.setSocketIdByUserId(userId, socket.id);
+      onlineUsers.setUserValueById({
+        userId,
+        value: {
+          chatRoomId: undefined,
+          socketId: socket.id,
+        },
+      });
     }
   });
 

@@ -124,6 +124,7 @@ export const addImageMessage = async (
 
     // uploads/images에 있는 파일은 binary로 되어있다.
     // binary파일 끝에 originalname을 이용해서 png/svg/jpg 같은 확장자가 붙은 이름으로 교체한다.
+
     renameSync(req.file?.path as string, fileName);
 
     const { from, to } = req.query as { from: string; to: string };
@@ -147,10 +148,10 @@ export const addImageMessage = async (
             : "sent",
           type: "image",
           sender: {
-            connect: { id: parseInt(from) },
+            connect: { id: parsedFrom },
           },
           reciever: {
-            connect: { id: parseInt(to) },
+            connect: { id: parsedTo },
           },
         },
       });
@@ -169,6 +170,44 @@ export const addAudioMessage = async (
   next: NextFunction
 ) => {
   try {
+    const date = Date.now();
+    let fileName = "uploads/recordings/" + date + req.file?.originalname;
+
+    renameSync(req.file?.path as string, fileName);
+
+    const { from, to } = req.query as { from: string; to: string };
+
+    if (from && to) {
+      const parsedFrom = parseInt(from);
+      const parsedTo = parseInt(to);
+      const prisma = getPrismaInstance();
+      const isUser = onlineUsers.isUserLoggedIn(parsedTo);
+
+      const isUserSameRoomWithTo =
+        parsedFrom === onlineUsers.getChatRoomIdByUserId(parsedTo);
+
+      const newMessage = await prisma.messages.create({
+        data: {
+          message: fileName,
+          status: isUser
+            ? isUserSameRoomWithTo
+              ? "read"
+              : "delivered"
+            : "sent",
+          type: "audio",
+          sender: {
+            connect: { id: parsedFrom },
+          },
+          reciever: {
+            connect: { id: parsedTo },
+          },
+        },
+      });
+
+      return res.status(201).json(newMessage);
+    }
+
+    return res.status(401).json({ message: "from and to are required" });
   } catch (error) {
     next(error);
   }

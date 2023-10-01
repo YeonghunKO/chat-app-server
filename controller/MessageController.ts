@@ -9,10 +9,12 @@ export const getMessages = async (
   next: NextFunction
 ) => {
   try {
-    const { from, to } = req.params;
+    const { from, to } = req.params as { from: any; to: any };
     const primsa = getPrismaInstance();
-
     if (to !== "undefined" && from !== "undefined") {
+      const isUserSameRoomWithTo =
+        from === onlineUsers.getChatRoomIdByUserId(to);
+
       // 내가 짝하마에게 보낸 메시지와 , 짝하마가 나한테 보낸 메시지 전부가 리턴됨.
       // 즉, 나와 상대방이 나눈 대화 전체를 불러온다.
       const messages = await primsa.messages.findMany({
@@ -38,8 +40,8 @@ export const getMessages = async (
       messages.forEach((message, index) => {
         const isRead = message.status === "read";
         const isMessageFromReciever = message.senderId === parseInt(to);
+        message.status = isUserSameRoomWithTo ? "read" : "delivered";
         if (isMessageFromReciever && !isRead) {
-          message.status = "read";
           unReadMessages.push(message.id);
         }
       });
@@ -50,7 +52,7 @@ export const getMessages = async (
           id: { in: unReadMessages },
         },
         data: {
-          status: "read",
+          status: isUserSameRoomWithTo ? "read" : "delivered",
         },
       });
 

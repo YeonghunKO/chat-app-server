@@ -50,15 +50,28 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  socket.on("add-user", (userId: number) => {
-    if (userId) {
+  socket.on("add-user", ({ me, other }: { me: number; other: number }) => {
+    if (me) {
       onlineUsers.setUserValueById({
-        userId,
+        userId: me,
         value: {
           chatRoomId: undefined,
           socketId: socket.id,
         },
       });
+      const users = Array.from(onlineUsers.onlineUsersData);
+      const currentChatUser = users.find(
+        ([userId, { chatRoomId, socketId }]) => chatRoomId === me
+      );
+
+      if (currentChatUser) {
+        const [currentChatUserId, { socketId }] = currentChatUser;
+        console.log("currentChatUser[1].socketId", currentChatUser[1].socketId);
+        socket.to(socketId).emit("recieve-msg", {
+          from: me,
+          to: currentChatUserId,
+        });
+      }
     }
   });
 
@@ -87,7 +100,6 @@ io.on("connection", (socket) => {
         socket.to(socketIdByUserId).emit("recieve-msg", {
           from: data.from,
           to: data.to,
-          message: data.message,
         });
       }
     }

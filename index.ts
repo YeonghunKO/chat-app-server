@@ -66,7 +66,6 @@ io.on("connection", (socket) => {
 
       if (currentChatUser) {
         const [currentChatUserId, { socketId }] = currentChatUser;
-        console.log("currentChatUser[1].socketId", currentChatUser[1].socketId);
         socket.to(socketId).emit("recieve-msg", {
           from: me,
           to: currentChatUserId,

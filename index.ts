@@ -100,6 +100,10 @@ io.on("connection", (socket) => {
           from: data.from,
           to: data.to,
         });
+
+        socket.to(socketIdByUserId).emit("update-chat-list-status", {
+          to: data.to,
+        });
       }
     }
   );

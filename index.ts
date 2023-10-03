@@ -91,10 +91,10 @@ io.on("connection", (socket) => {
   socket.on(
     "send-msg",
     (data: { to: number; from: number; message: string }) => {
-      const recievedUserLoggedIn = onlineUsers.isUserLoggedIn(data.to);
+      const isOtherLoggedIn = onlineUsers.isUserLoggedIn(data.to);
 
       const socketIdByUserId = onlineUsers.getSocketIdByUserId(data.to);
-      if (recievedUserLoggedIn && socketIdByUserId) {
+      if (isOtherLoggedIn && socketIdByUserId) {
         // priviate room 을 만들려면 socketId를 to에 pass하면 됨.
         socket.to(socketIdByUserId).emit("recieve-msg", {
           from: data.from,

@@ -78,6 +78,98 @@ export const getMessages = async (
   }
 };
 
+export const sendUpdatedChatListsData = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { from } = req.params as { from: any };
+    const userId = parseInt(from);
+    const prisma = getPrismaInstance();
+
+    const usersWithMessages = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        sentMessage: {
+          include: {
+            sender: true,
+            reciever: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        recievedMessage: {
+          include: {
+            sender: true,
+            reciever: true,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+      },
+    });
+
+    if (usersWithMessages) {
+      const allMessages = [
+        ...usersWithMessages?.sentMessage,
+        ...usersWithMessages?.recievedMessage,
+      ];
+
+      console.log("allMessages", allMessages);
+      allMessages.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+      const chatLists = new Map();
+
+      allMessages.forEach((message) => {
+        // 애초에 처음부터 나의 id나 profile이 포함될 수 가 없다.
+        const isSentByMe = message.senderId === userId;
+
+        const otherId = isSentByMe ? message.recieverId : message.senderId;
+
+        if (!chatLists.has(otherId)) {
+          const {
+            sender: { password: senderPass, ...restSender },
+            reciever: { password: recieverPass, ...restReciever },
+            ...rest
+          } = message;
+          if (isSentByMe) {
+            chatLists.set(otherId, {
+              other: restReciever,
+              ...rest,
+
+              totalUnReadCount: 0,
+            });
+          } else {
+            chatLists.set(otherId, {
+              other: restSender,
+              ...rest,
+
+              totalUnReadCount: message.status !== "read" ? 1 : 0,
+            });
+          }
+        } else if (message.status !== "read" && !isSentByMe) {
+          const messageData = chatLists.get(otherId);
+          chatLists.set(otherId, {
+            ...messageData,
+            totalUnReadCount: messageData.totalUnReadCount + 1,
+          });
+        }
+      });
+      console.log("chatLists", chatLists);
+      return res.status(201).json(Array.from(chatLists.values()));
+    } else {
+      return res.status(401).json({
+        message: "from and to are required",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const addMessage = async (
   req: Request,
   res: Response,

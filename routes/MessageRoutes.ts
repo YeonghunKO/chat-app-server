@@ -4,6 +4,7 @@ import {
   addImageMessage,
   addMessage,
   getMessages,
+  sendUpdatedChatListsData,
 } from "../controller/MessageController";
 
 import multer from "multer";
@@ -17,5 +18,6 @@ router.get("/get-messages/:from/:to", getMessages);
 router.post("/add-message", addMessage);
 router.post("/add-image-message", uploadImage.single("image"), addImageMessage);
 router.post("/add-audio-message", uploadAudio.single("audio"), addAudioMessage);
+router.get("/get-updated-chat-list/:from", sendUpdatedChatListsData);
 
 export default router;

@@ -92,19 +92,32 @@ io.on("connection", (socket) => {
     "send-msg",
     (data: { to: number; from: number; message: string }) => {
       const isOtherLoggedIn = onlineUsers.isUserLoggedIn(data.to);
-
-      const socketIdByUserId = onlineUsers.getSocketIdByUserId(data.to);
-      if (isOtherLoggedIn && socketIdByUserId) {
+      const otherSocketId = onlineUsers.getSocketIdByUserId(data.to);
+      if (isOtherLoggedIn && otherSocketId) {
         // priviate room 을 만들려면 socketId를 to에 pass하면 됨.
-        socket.to(socketIdByUserId).emit("recieve-msg", {
+        socket.to(otherSocketId).emit("recieve-msg", {
           from: data.from,
           to: data.to,
         });
 
-        socket.to(socketIdByUserId).emit("update-chat-list-status", {
+        socket.to(otherSocketId).emit("update-chat-list-status", {
           to: data.to,
         });
       }
     }
   );
+
+  socket.on("mark-read", ({ to, from }: { to: number; from: number }) => {
+    const otherSocketId = onlineUsers.getSocketIdByUserId(to);
+
+    if (otherSocketId) {
+      socket.to(otherSocketId).emit("update-message-read", {
+        from,
+        to,
+      });
+      socket.to(otherSocketId).emit("update-chat-list-status", {
+        to,
+      });
+    }
+  });
 });

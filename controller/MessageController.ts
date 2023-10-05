@@ -137,14 +137,14 @@ export const sendUpdatedChatListsData = async (
           } = message;
           if (isSentByMe) {
             chatLists.set(otherId, {
-              other: restReciever,
+              chatUser: restReciever,
               ...rest,
 
               totalUnReadCount: 0,
             });
           } else {
             chatLists.set(otherId, {
-              other: restSender,
+              chatUser: restSender,
               ...rest,
 
               totalUnReadCount: message.status !== "read" ? 1 : 0,

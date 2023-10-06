@@ -90,20 +90,31 @@ io.on("connection", (socket) => {
   // 그럼 client에서 recieve-msg를 받는다.
   socket.on(
     "send-msg",
-    (data: { to: number; from: number; message: string }) => {
-      const isOtherLoggedIn = onlineUsers.isUserLoggedIn(data.to);
-      const otherSocketId = onlineUsers.getSocketIdByUserId(data.to);
+    ({
+      to: other,
+      from: me,
+    }: {
+      to: number;
+      from: number;
+      message: string;
+    }) => {
+      const isOtherLoggedIn = onlineUsers.isUserLoggedIn(other);
+      const otherSocketId = onlineUsers.getSocketIdByUserId(other);
+
       if (isOtherLoggedIn && otherSocketId) {
         // priviate room 을 만들려면 socketId를 to에 pass하면 됨.
         socket.to(otherSocketId).emit("recieve-msg", {
-          from: data.from,
-          to: data.to,
+          from: me,
+          to: other,
         });
 
         socket.to(otherSocketId).emit("update-chat-list-status", {
-          to: data.to,
+          to: other,
         });
       }
+      socket.emit("update-my-chat-list-status", {
+        to: me,
+      });
     }
   );
 

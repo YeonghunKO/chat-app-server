@@ -64,6 +64,7 @@ io.on("connection", (socket) => {
         ([userId, { chatRoomId, socketId }]) => chatRoomId === me
       );
 
+      // chat container에 상대방이 로그인하면 delivered가 표시하게끔
       if (currentChatUser) {
         const [currentChatUserId, { socketId }] = currentChatUser;
         socket.to(socketId).emit("recieve-msg", {
@@ -112,6 +113,7 @@ io.on("connection", (socket) => {
           to: other,
         });
       }
+      // 이렇게 하면 나한테만 보내게 됨.
       socket.emit("update-my-chat-list-status", {
         to: me,
       });
@@ -126,9 +128,17 @@ io.on("connection", (socket) => {
         from,
         to,
       });
-      socket.to(otherSocketId).emit("update-chat-list-status", {
-        to,
-      });
+
+      setTimeout(() => {
+        socket.to(otherSocketId).emit("update-chat-list-status", {
+          to,
+        });
+      }, 500);
     }
+    setTimeout(() => {
+      socket.emit("update-my-chat-list-status", {
+        to: from,
+      });
+    }, 500);
   });
 });

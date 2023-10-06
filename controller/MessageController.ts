@@ -84,6 +84,7 @@ export const sendUpdatedChatListsData = async (
   next: NextFunction
 ) => {
   try {
+    // 누구의 메시지 db를 조회할것인가?
     const { from } = req.params as { from: any };
     const userId = parseInt(from);
     const prisma = getPrismaInstance();

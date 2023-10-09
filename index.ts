@@ -71,7 +71,18 @@ io.on("connection", (socket) => {
           from: me,
           to: currentChatUserId,
         });
+
+        setTimeout(() => {
+          socket.to(socketId).emit("update-chat-list-status", {
+            to: currentChatUserId,
+          });
+        }, 500);
       }
+      setTimeout(() => {
+        socket.emit("update-my-chat-list-status", {
+          to: me,
+        });
+      }, 500);
     }
   });
 

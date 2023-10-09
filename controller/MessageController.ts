@@ -119,7 +119,6 @@ export const sendUpdatedChatListsData = async (
         ...usersWithMessages?.recievedMessage,
       ];
 
-      console.log("allMessages", allMessages);
       allMessages.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
       const chatLists = new Map();
@@ -159,7 +158,6 @@ export const sendUpdatedChatListsData = async (
           });
         }
       });
-      console.log("chatLists", chatLists);
       return res.status(201).json(Array.from(chatLists.values()));
     } else {
       return res.status(401).json({

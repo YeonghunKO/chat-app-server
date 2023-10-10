@@ -78,6 +78,50 @@ export const getMessages = async (
   }
 };
 
+export const filterMessages = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { from, message } = req.params as { from: any; message: string };
+    const userId = parseInt(from);
+    const primsa = getPrismaInstance();
+
+    const userWithMessages = await primsa.user.findUnique({
+      where: { id: userId },
+      include: {
+        sentMessage: {
+          where: {
+            message: {
+              contains: message,
+            },
+          },
+        },
+        recievedMessage: {
+          where: {
+            message: {
+              contains: message,
+            },
+          },
+        },
+      },
+    });
+
+    if (userWithMessages) {
+      const filteredMessages = [
+        ...userWithMessages.recievedMessage,
+        ...userWithMessages.sentMessage,
+      ];
+      return res.status(201).json(filteredMessages);
+    } else {
+      return res.status(201).json([]);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const sendUpdatedChatListsData = async (
   req: Request,
   res: Response,

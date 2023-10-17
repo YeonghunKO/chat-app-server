@@ -152,4 +152,20 @@ io.on("connection", (socket) => {
       });
     }, 500);
   });
+
+  socket.on("disconnect", () => {
+    socket.broadcast.emit("callEnded");
+  });
+
+  socket.on("callUser", ({ userToCall, signalData, from, name }) => {
+    socket.to(userToCall).emit("callUser", { signal: signalData, from, name });
+  });
+
+  socket.on("answerCall", (data) => {
+    socket.to(data.to).emit("callAccepted", data.signal);
+  });
+
+  socket.on("rejectCall", (data) => {
+    socket.to(data.to).emit("callRejected", data.signal);
+  });
 });

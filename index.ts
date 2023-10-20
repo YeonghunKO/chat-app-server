@@ -11,6 +11,7 @@ import MessageRoutes from "./routes/MessageRoutes";
 
 import errorHandle from "./utils/errorHandle";
 import { TOnlineUser, onlineUsers } from "./utils/onlineUser";
+import { IUserInfo } from "./type/user";
 
 dotenv.config();
 
@@ -160,15 +161,44 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("callEnded");
   });
 
-  socket.on("callUser", ({ userToCall, signalData, from, name }) => {
-    socket.to(userToCall).emit("callUser", { signal: signalData, from, name });
+  socket.on(
+    "callUser",
+    ({
+      userToCall,
+      signalData,
+      callerInfo,
+    }: {
+      userToCall: number;
+      signalData: any;
+      callerInfo: IUserInfo;
+    }) => {
+      const userToCallSocketId = onlineUsers.getSocketIdByUserId(userToCall);
+      if (userToCallSocketId) {
+        socket
+          .to(userToCallSocketId)
+          .emit("callUser", { signal: signalData, callerInfo });
+      }
+    }
+  );
+
+  socket.on("answerCall", ({ to, signal }: { to: number; signal?: any }) => {
+    const userToCallSocketId = onlineUsers.getSocketIdByUserId(to);
+    if (userToCallSocketId) {
+      socket.to(userToCallSocketId).emit("callAccepted", signal);
+    }
   });
 
-  socket.on("answerCall", (data) => {
-    socket.to(data.to).emit("callAccepted", data.signal);
+  socket.on("rejectCall", ({ to, signal }: { to: number; signal?: any }) => {
+    const userToCallSocketId = onlineUsers.getSocketIdByUserId(to);
+    if (userToCallSocketId) {
+      socket.to(userToCallSocketId).emit("callRejected", signal);
+    }
   });
 
-  socket.on("rejectCall", (data) => {
-    socket.to(data.to).emit("callRejected", data.signal);
+  socket.on("cancelCall", ({ to, signal }: { to: number; signal?: any }) => {
+    const userToCallSocketId = onlineUsers.getSocketIdByUserId(to);
+    if (userToCallSocketId) {
+      socket.to(userToCallSocketId).emit("callCanceled", signal);
+    }
   });
 });

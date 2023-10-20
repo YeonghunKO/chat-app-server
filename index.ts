@@ -63,6 +63,9 @@ io.on("connection", (socket) => {
       const currentChatUser = users.find(
         ([userId, { chatRoomId, socketId }]) => chatRoomId === me
       );
+      io.emit("get-onlineUsers", {
+        onlineUsers: JSON.stringify(users),
+      });
 
       // chat container에 상대방이 로그인하면 delivered가 표시하게끔
       if (currentChatUser) {

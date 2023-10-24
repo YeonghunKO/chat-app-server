@@ -11,12 +11,20 @@ export const getMessages = async (
   try {
     const { from, to } = req.params as { from: any; to: any };
     const primsa = getPrismaInstance();
+
+    const userId = parseInt(from);
+    const otherId = parseInt(to);
+
     if (to !== "undefined" && from !== "undefined") {
       const isUserSameRoomWithOther =
-        parseInt(from) === onlineUsers.getChatRoomIdByUserId(parseInt(to));
+        userId === onlineUsers.getChatRoomIdByUserId(otherId);
 
-      const isOtherSameRoomWithUser =
-        parseInt(to) === onlineUsers.getChatRoomIdByUserId(parseInt(from));
+      const isUserLoggedInReadMessage =
+        otherId === onlineUsers.getChatRoomIdByUserId(userId);
+
+      const isBothAreInTheSameRoom =
+        isUserSameRoomWithOther && isUserLoggedInReadMessage;
+      const isOtherLoggedIn = onlineUsers.isUserLoggedIn(otherId);
 
       // 내가 짝하마에게 보낸 메시지와 , 짝하마가 나한테 보낸 메시지 전부가 리턴됨.
       // 즉, 나와 상대방이 나눈 대화 전체를 불러온다.
@@ -24,12 +32,12 @@ export const getMessages = async (
         where: {
           OR: [
             {
-              senderId: parseInt(from),
-              recieverId: parseInt(to),
+              senderId: userId,
+              recieverId: otherId,
             },
             {
-              senderId: parseInt(to),
-              recieverId: parseInt(from),
+              senderId: otherId,
+              recieverId: userId,
             },
           ],
         },
@@ -38,17 +46,31 @@ export const getMessages = async (
         },
       });
 
+      let finalStatus: string;
+
+      if (isBothAreInTheSameRoom) {
+        finalStatus = "read";
+      } else {
+        finalStatus = "delivered";
+      }
+
+      if (!isOtherLoggedIn) {
+        if (isUserLoggedInReadMessage) {
+          finalStatus = "read";
+        } else {
+          finalStatus = "delivered";
+        }
+      }
+
       const unReadMessages: number[] = [];
       // 내가 메시지를 불러올때 그 중에서 상대방이 나에게 보낸 메시지에 read 표시를 하고
       messages.forEach((message, index) => {
         const isRead = message.status === "read";
-        const isMessageFromReciever = message.senderId === parseInt(to);
+        const isMessageFromReciever = message.senderId === otherId;
+
         if (isMessageFromReciever && !isRead) {
-          message.status = isUserSameRoomWithOther
-            ? isOtherSameRoomWithUser
-              ? "read"
-              : "delivered"
-            : "delivered";
+          message.status = finalStatus;
+
           unReadMessages.push(message.id);
         }
       });
@@ -59,11 +81,7 @@ export const getMessages = async (
           id: { in: unReadMessages },
         },
         data: {
-          status: isUserSameRoomWithOther
-            ? isOtherSameRoomWithUser
-              ? "read"
-              : "delivered"
-            : "delivered",
+          status: finalStatus,
         },
       });
 

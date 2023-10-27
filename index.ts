@@ -157,32 +157,43 @@ io.on("connection", (socket) => {
     }, 500);
   });
 
-  socket.on("disconnect", () => {
-    socket.broadcast.emit("callEnded");
+  socket.on("disconnecting", (something) => {
+    const userId = onlineUsers.getKeyBySocketId(socket.id);
+    if (userId) {
+      onlineUsers.deleteUser(userId);
+    }
+
+    io.emit("get-onlineUsers", {
+      onlineUsers: JSON.stringify([...onlineUsers.onlineUsersData]),
+    });
   });
 
   socket.on(
     "callUser",
     ({
       userToCall,
-      signalData,
+      signal,
       callerInfo,
     }: {
       userToCall: number;
-      signalData: any;
+      signal: any;
       callerInfo: IUserInfo;
     }) => {
+      console.log("userToCall", userToCall);
+
       const userToCallSocketId = onlineUsers.getSocketIdByUserId(userToCall);
       if (userToCallSocketId) {
-        socket
-          .to(userToCallSocketId)
-          .emit("callUser", { signal: signalData, callerInfo });
+        console.log("userToCallSocketId", userToCallSocketId);
+        io.to(userToCallSocketId).emit("callUser", { signal, callerInfo });
       }
     }
   );
 
   socket.on("answerCall", ({ to, signal }: { to: number; signal?: any }) => {
     const userToCallSocketId = onlineUsers.getSocketIdByUserId(to);
+    if (!userToCallSocketId) {
+      return;
+    }
     if (userToCallSocketId) {
       socket.to(userToCallSocketId).emit("callAccepted", signal);
     }

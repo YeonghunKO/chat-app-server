@@ -6,6 +6,8 @@ interface IOnlineUser {
   getSocketIdByUserId: (userId: number) => string | undefined;
   getChatRoomIdByUserId: (userId: number) => number | undefined;
   setChatRoomIdByUserId: (userId: number, chatRoomId: number) => void;
+  getKeyBySocketId: (socketId: string) => number | undefined;
+  deleteUser: (userId: number) => void;
 
   setUserValueById: ({
     userId,
@@ -69,6 +71,20 @@ class OnlineUser implements IOnlineUser {
         socketId: value.socketId,
       });
     }
+  }
+
+  getKeyBySocketId(socketId: string) {
+    for (const [key, value] of this.onlineUsers.entries()) {
+      if (value.socketId === socketId) {
+        return key;
+      }
+    }
+
+    return undefined;
+  }
+
+  deleteUser(userId: number) {
+    this.onlineUsers.delete(userId);
   }
 }
 

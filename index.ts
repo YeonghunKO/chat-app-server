@@ -199,17 +199,17 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("rejectCall", ({ to, signal }: { to: number; signal?: any }) => {
+  socket.on("rejectCall", ({ to }: { to: number }) => {
     const userToCallSocketId = onlineUsers.getSocketIdByUserId(to);
     if (userToCallSocketId) {
-      socket.to(userToCallSocketId).emit("callRejected", signal);
+      socket.to(userToCallSocketId).emit("callRejected");
     }
   });
 
-  socket.on("cancelCall", ({ to, signal }: { to: number; signal?: any }) => {
+  socket.on("cancelCall", ({ to }: { to: number }) => {
     const userToCallSocketId = onlineUsers.getSocketIdByUserId(to);
     if (userToCallSocketId) {
-      socket.to(userToCallSocketId).emit("callCanceled", signal);
+      socket.to(userToCallSocketId).emit("callCanceled");
     }
   });
 });

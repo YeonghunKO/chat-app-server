@@ -63,7 +63,7 @@ export const getMessages = async (
       }
 
       const unReadMessages: number[] = [];
-      // 내가 메시지를 불러올때 그 중에서 상대방이 나에게 보낸 메시지에 read 표시를 하고
+      // 내가 메시지를 불러올때 그 중에서 상대방이 나에게 보낸 메시중 안읽은것 추려냄
       messages.forEach((message, index) => {
         const isRead = message.status === "read";
         const isMessageFromReciever = message.senderId === otherId;
@@ -75,7 +75,6 @@ export const getMessages = async (
         }
       });
 
-      // 실제 db에서 까지, 안읽은 메시지들 다 read로 업데이트
       await primsa.messages.updateMany({
         where: {
           id: { in: unReadMessages },
@@ -185,8 +184,8 @@ export const sendUpdatedChatListsData = async (
 
       const chatLists = new Map();
 
+      // 안읽은 메시지 갯수 표시를 위해
       allMessages.forEach((message) => {
-        // 애초에 처음부터 나의 id나 profile이 포함될 수 가 없다.
         const isSentByMe = message.senderId === userId;
 
         const otherId = isSentByMe ? message.recieverId : message.senderId;
@@ -236,12 +235,6 @@ export const addMessage = async (
   res: Response,
   next: NextFunction
 ) => {
-  // 유저가 접속하면 client/main에서 add-user socket이 호출
-  // server/index에서 add-user를 받아서 onlineusers에 현재 접속한 user를 set할것입
-  // 즉 메시지를 전송한 시점에 to user가 접속해있으면 delivered이고 접속해있지 않으면 sent이다.
-  // 그리고 client/main에서 currentChatUser를 useEffect를 통해 감지한다음 바뀔때 마다 currentUser에 해당하는 message를
-  // get-message api를 통해서 가져와서 chatContainer가 업데이트 됨
-
   try {
     const { from, to, message } = req.body;
 

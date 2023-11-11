@@ -179,11 +179,8 @@ io.on("connection", (socket) => {
       signal: any;
       callerInfo: IUserInfo;
     }) => {
-      console.log("userToCall", userToCall);
-
       const userToCallSocketId = onlineUsers.getSocketIdByUserId(userToCall);
       if (userToCallSocketId) {
-        console.log("userToCallSocketId", userToCallSocketId);
         io.to(userToCallSocketId).emit("callUser", { signal, callerInfo });
       }
     }

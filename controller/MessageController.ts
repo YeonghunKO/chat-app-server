@@ -63,6 +63,7 @@ export const getMessages = async (
       }
 
       const unReadMessages: number[] = [];
+      const messagesWithDate = new Map();
       // 내가 메시지를 불러올때 그 중에서 상대방이 나에게 보낸 메시중 안읽은것 추려냄
       messages.forEach((message, index) => {
         const isRead = message.status === "read";
@@ -73,7 +74,18 @@ export const getMessages = async (
 
           unReadMessages.push(message.id);
         }
+
+        const date = new Date(message.createdAt).toISOString().split("T")[0];
+
+        if (messagesWithDate.has(date)) {
+          messagesWithDate.get(date).push(message);
+        } else {
+          messagesWithDate.set(date, []);
+          messagesWithDate.get(date).push(message);
+        }
       });
+
+      const arrayedMessagesWithDate = Array.from(messagesWithDate);
 
       await primsa.messages.updateMany({
         where: {
@@ -84,7 +96,7 @@ export const getMessages = async (
         },
       });
 
-      return res.status(201).json(messages);
+      return res.status(201).json(arrayedMessagesWithDate);
     } else {
       return res.status(401).json({
         message: "from and to are required",

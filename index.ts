@@ -51,7 +51,7 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  socket.on("add-user", ({ me, other }: { me: number; other: number }) => {
+  socket.on("add-user", ({ me }: { me: number }) => {
     if (me) {
       onlineUsers.setUserValueById({
         userId: me,
@@ -124,14 +124,18 @@ io.on("connection", (socket) => {
           to: other,
         });
 
-        socket.to(otherSocketId).emit("update-chat-list-status", {
-          to: other,
-        });
+        setTimeout(() => {
+          socket.to(otherSocketId).emit("update-chat-list-status", {
+            to: other,
+          });
+        }, 500);
       }
       // 이렇게 하면 나한테만 보내게 됨.
-      socket.emit("update-my-chat-list-status", {
-        to: me,
-      });
+      setTimeout(() => {
+        socket.emit("update-my-chat-list-status", {
+          to: me,
+        });
+      }, 500);
     }
   );
 

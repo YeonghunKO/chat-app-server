@@ -56,7 +56,7 @@ io.on("connection", (socket) => {
       onlineUsers.setUserValueById({
         userId: me,
         value: {
-          chatRoomId: undefined,
+          chatRoomId: null,
           socketId: socket.id,
         },
       });

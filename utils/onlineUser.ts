@@ -1,12 +1,15 @@
-export type TOnlineUser = { socketId: string; chatRoomId: number | undefined };
+export type TOnlineUser = {
+  socketId: string;
+  chatRoomId: number | undefined | null;
+};
 
 interface IOnlineUser {
   setSocketIdByUserId: (userId: number, socketId: string) => void;
   isUserLoggedIn: (userId: number) => boolean;
-  getSocketIdByUserId: (userId: number) => string | undefined;
-  getChatRoomIdByUserId: (userId: number) => number | undefined;
+  getSocketIdByUserId: (userId: number) => string | undefined | null;
+  getChatRoomIdByUserId: (userId: number) => number | undefined | null;
   setChatRoomIdByUserId: (userId: number, chatRoomId: number) => void;
-  getKeyBySocketId: (socketId: string) => number | undefined;
+  getKeyBySocketId: (socketId: string) => number | undefined | null;
   deleteUser: (userId: number) => void;
 
   setUserValueById: ({

@@ -161,7 +161,7 @@ io.on("connection", (socket) => {
     }, 500);
   });
 
-  socket.on("disconnecting", (something) => {
+  socket.on("disconnecting", () => {
     const userId = onlineUsers.getKeyBySocketId(socket.id);
     if (userId) {
       onlineUsers.deleteUser(userId);

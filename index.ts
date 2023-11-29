@@ -172,6 +172,17 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("logout", () => {
+    const userId = onlineUsers.getKeyBySocketId(socket.id);
+    if (userId) {
+      onlineUsers.deleteUser(userId);
+    }
+
+    io.emit("get-onlineUsers", {
+      onlineUsers: JSON.stringify([...onlineUsers.onlineUsersData]),
+    });
+  });
+
   socket.on(
     "callUser",
     ({

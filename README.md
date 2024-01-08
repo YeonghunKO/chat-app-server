@@ -1,6 +1,6 @@
 # 📷chat app
 
-[chat-app](https://github.com/YeonghunKO/chat-app-client/tree/main)의 백엔드를 관리하는 레포지토리 입니다.
+[chat-app](https://github.com/YeonghunKO/chat-app-client/tree/main)의 백엔드를 관리하는 레포지토리 입니다!
 
 ## 📢 주요 기능
 1. 유저 정보데이터를 저장, 관리합니다.

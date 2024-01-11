@@ -1,5 +1,8 @@
 import jwt from "jsonwebtoken";
 import getPrismaInstance from "../utils/PrismaClient";
+import dotenv from "dotenv";
+dotenv.config();
+
 const accessSecret = process.env.SCRETE_ACCESS as string;
 const refreshSecret = process.env.SCRETE_REFRESH as string;
 

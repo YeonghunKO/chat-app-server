@@ -13,9 +13,21 @@ import errorHandle from "./utils/errorHandle";
 import { TOnlineUser, onlineUsers } from "./utils/onlineUser";
 import { IUserInfo } from "./type/user";
 
+import session from "express-session";
+
 dotenv.config();
 
 const app = express();
+app.set("trust proxy", 1); // trust first proxy
+app.use(
+  session({
+    secret: "chat-app-backend-secret",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true },
+    proxy: true,
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser());

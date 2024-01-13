@@ -13,7 +13,7 @@ import errorHandle from "./utils/errorHandle";
 import { TOnlineUser, onlineUsers } from "./utils/onlineUser";
 import { IUserInfo } from "./type/user";
 
-import session from "cookie-session";
+import session from "express-session";
 
 dotenv.config();
 
@@ -22,7 +22,9 @@ app.set("trust proxy", 1); // trust first proxy
 app.use(
   session({
     secret: "chat-app-backend-secret",
-    secureProxy: true,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true },
   })
 );
 

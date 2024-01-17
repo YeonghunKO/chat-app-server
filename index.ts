@@ -41,13 +41,15 @@ app.set("trust proxy", true); // trust first proxy
 //   })
 // );
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL,
-    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
-    credentials: true,
-  })
-);
+if (process.env.NODE_ENV !== "production") {
+  app.use(
+    cors({
+      origin: process.env.CLIENT_URL,
+      methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+      credentials: true,
+    })
+  );
+}
 
 app.use(express.json());
 app.use(cookieParser());

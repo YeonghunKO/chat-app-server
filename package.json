@@ -5,13 +5,14 @@
     "dbPush": "prisma migrate dev --name whats-app && prisma generate",
     "studio": "prisma studio",
     "build:prod": "webpack --config webpack.config.js --mode production",
-    "start:prod": "nodemon --exec 'ts-node' ./dist/bundle.js"
+    "start:prod": "nodemon --exec 'ts-node' ./dist/bundle.js",
+    "redis": "redis-server"
   },
   "dependencies": {
     "@prisma/client": "^4.14.0",
     "@vercel/postgres": "^0.4.1",
+    "connect-redis": "^7.1.0",
     "cookie-parser": "^1.4.6",
-    "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.0.3",
@@ -21,6 +22,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemon": "^2.0.20",
     "prisma": "^4.14.0",
+    "redis": "^4.6.12",
     "socket.io": "^4.6.1",
     "ts-node": "^10.9.1"
   },

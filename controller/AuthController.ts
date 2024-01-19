@@ -164,19 +164,9 @@ export const signIn = async (
       },
     });
 
-    res.cookie(COOKIE.ACCESS_TOKEN, accessToken, {
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-      domain: "chat-app-client-yeonghunko.vercel.app",
-    });
+    res.cookie(COOKIE.ACCESS_TOKEN, accessToken);
 
-    res.cookie(COOKIE.REFRESH_IDX, encodeURIComponent(email), {
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-      domain: "chat-app-client-yeonghunko.vercel.app",
-    });
+    res.cookie(COOKIE.REFRESH_IDX, encodeURIComponent(email));
 
     return res.status(201).json({
       user: {
@@ -218,19 +208,9 @@ export const onSignUpUser = async (
       },
     });
 
-    res.cookie(COOKIE.ACCESS_TOKEN, accessToken, {
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-      domain: "chat-app-client-yeonghunko.vercel.app",
-    });
+    res.cookie(COOKIE.ACCESS_TOKEN, accessToken);
 
-    res.cookie(COOKIE.REFRESH_IDX, encodeURIComponent(email), {
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-      domain: "chat-app-client-yeonghunko.vercel.app",
-    });
+    res.cookie(COOKIE.REFRESH_IDX, encodeURIComponent(email));
 
     return res.status(201).json({
       user: {

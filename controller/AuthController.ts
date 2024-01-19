@@ -166,10 +166,16 @@ export const signIn = async (
 
     res.cookie(COOKIE.ACCESS_TOKEN, accessToken, {
       httpOnly: true,
+      sameSite: "none",
+      secure: true,
+      domain: "chat-app-client-yeonghunko.vercel.app",
     });
 
     res.cookie(COOKIE.REFRESH_IDX, encodeURIComponent(email), {
       httpOnly: true,
+      sameSite: "none",
+      secure: true,
+      domain: "chat-app-client-yeonghunko.vercel.app",
     });
 
     return res.status(201).json({
@@ -214,10 +220,16 @@ export const onSignUpUser = async (
 
     res.cookie(COOKIE.ACCESS_TOKEN, accessToken, {
       httpOnly: true,
+      sameSite: "none",
+      secure: true,
+      domain: "chat-app-client-yeonghunko.vercel.app",
     });
 
     res.cookie(COOKIE.REFRESH_IDX, encodeURIComponent(email), {
       httpOnly: true,
+      sameSite: "none",
+      secure: true,
+      domain: "chat-app-client-yeonghunko.vercel.app",
     });
 
     return res.status(201).json({

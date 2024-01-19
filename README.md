@@ -17,7 +17,9 @@ _**아래는 클론코드 강의에 없는 기능이지만 필요하다고 생�
 
 1. 현재 로그인한 유저를 class로 관리하였습니다.([onlineUsers](https://github.com/YeonghunKO/chat-app-server/blob/master/utils/onlineUser.ts))
 2. jsonwebtokens를 이용해 인가를 적용했습니다.
-3. controller에서 발생하는 에러를 핸들링하였습니다.([errorHandle](https://github.com/YeonghunKO/chat-app-server/blob/master/utils/errorHandle.ts))   
+3. controller에서 발생하는 에러를 핸들링하였습니다.([errorHandle](https://github.com/YeonghunKO/chat-app-server/blob/master/utils/errorHandle.ts))
+4. 날짜별로 메시지를 묶어서 프론트에 넘겨주었습니다(https://github.com/YeonghunKO/chat-app-server/blob/master/controller/MessageController.ts)
+   - 이로써 프론트는 날짜별로 일일이 필터링 할 필요없어졌습니다.    
 
 <br>
 

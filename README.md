@@ -36,7 +36,21 @@ _**아래는 클론코드 강의에 없는 기능이지만 필요하다고 생�
 
 ## 🔑 실행방법
 
+.env를 만들고 아래 환경변수를 추가합니다
+
+```cmd
+PORT = 80
+CLIENT_URL = http://localhost:3000
+
+SCRETE_ACCESS = zzakdol
+SCRETE_REFRESH = gongnam
+
+DATABASE_URL="postgresql://postgres:koil132123451234@db.xpdqxuuljksmrjhubmtn.supabase.co:5432/postgres"
+```
+
+
 ```cmd
 $ npm install
+$ redis-server
 $ npm run start
 ```

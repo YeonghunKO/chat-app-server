@@ -34,7 +34,10 @@ app.use(
     secret: "chat-app-backend-secret",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true },
+    cookie: {
+      secure: true,
+      domain: process.env.NODE_ENV === "production" && ".devlog.shop",
+    },
     store: redisStore,
   })
 );

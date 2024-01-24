@@ -36,7 +36,7 @@ app.use(
     saveUninitialized: true,
     cookie: {
       secure: true,
-      domain: process.env.NODE_ENV === "production" && ".devlog.shop",
+      domain: process.env.NODE_ENV === "production" && ".chat-app.live",
     },
     store: redisStore,
   })

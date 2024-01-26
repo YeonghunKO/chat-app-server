@@ -18,29 +18,29 @@ import { IUserInfo } from "./type/user";
 import session from "express-session";
 
 dotenv.config();
-let redisClient = createClient();
-redisClient.connect().catch(console.error);
+// let redisClient = createClient();
+// redisClient.connect().catch(console.error);
 
-let redisStore = new RedisStore({
-  client: redisClient,
-  prefix: "my-chat-app:",
-});
+// let redisStore = new RedisStore({
+//   client: redisClient,
+//   prefix: "my-chat-app:",
+// });
 
 const app = express();
 app.set("trust proxy", true); // trust first proxy
 
-app.use(
-  session({
-    secret: "chat-app-backend-secret",
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      secure: true,
-      domain: process.env.NODE_ENV === "production" && ".chat-app.live",
-    },
-    store: redisStore,
-  })
-);
+// app.use(
+//   session({
+//     secret: "chat-app-backend-secret",
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//       secure: true,
+//       domain: process.env.NODE_ENV === "production" && ".chat-app.live",
+//     },
+//     store: redisStore,
+//   })
+// );
 
 if (process.env.NODE_ENV !== "production") {
   app.use(

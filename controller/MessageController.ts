@@ -242,7 +242,7 @@ export const sendUpdatedChatListsData = async (
   }
 };
 
-export const addMessage = async (
+export const addMessages = async (
   req: Request,
   res: Response,
   next: NextFunction

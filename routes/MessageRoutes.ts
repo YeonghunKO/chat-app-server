@@ -15,7 +15,7 @@ const router = Router();
 const uploadImage = multer({ dest: "uploads/images/" });
 const uploadAudio = multer({ dest: "uploads/recordings/" });
 
-router.get("/messages/from/:from/to/:to", getMessages);
+router.get("/from/:from/to/:to", getMessages);
 router.post("", addMessages);
 router.post("/image", uploadImage.single("image"), addImageMessage);
 router.post("/audio", uploadAudio.single("audio"), addAudioMessage);

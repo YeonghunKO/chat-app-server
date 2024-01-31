@@ -38,8 +38,8 @@ app.use("/uploads/images", express.static("uploads/images"));
 app.use("/uploads/recordings", express.static("uploads/recordings"));
 
 // api/auth가 base url이고 AuthRoutes안에 지정된 path가 sub path이다
-app.use("/api/auth", AuthRoutes);
-app.use("/api/message", MessageRoutes);
+app.use("/auth", AuthRoutes);
+app.use("/message", MessageRoutes);
 
 app.use(errorHandle);
 const server = app.listen(process.env.PORT, () => {

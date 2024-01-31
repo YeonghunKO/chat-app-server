@@ -20,6 +20,6 @@ router.post("", addMessages);
 router.post("/image", uploadImage.single("image"), addImageMessage);
 router.post("/audio", uploadAudio.single("audio"), addAudioMessage);
 router.get("/chat-list/:from", sendUpdatedChatListsData);
-router.get("/filter-message/:from/:message", filterMessages);
+router.get("", filterMessages);
 
 export default router;

@@ -113,7 +113,7 @@ export const filterMessages = async (
   next: NextFunction
 ) => {
   try {
-    const { from, message } = req.params as { from: any; message: string };
+    const { from, message } = req.query as { from: any; message: string };
     const userId = parseInt(from);
     const primsa = getPrismaInstance();
 

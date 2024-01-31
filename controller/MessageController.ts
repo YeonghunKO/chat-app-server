@@ -162,8 +162,6 @@ export const sendUpdatedChatListsData = async (
     const userId = parseInt(from);
     const prisma = getPrismaInstance();
 
-    console.log("userId", userId);
-
     const usersWithMessages = await prisma.user.findUnique({
       where: { id: userId },
       include: {

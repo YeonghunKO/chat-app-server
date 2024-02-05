@@ -20,9 +20,15 @@ _**아래는 클론코드 강의에 없는 기능이지만 필요하다고 생�
 2. jsonwebtokens를 이용해 인가를 적용했습니다.([jwtAuth](https://github.com/YeonghunKO/chat-app-server/blob/master/middleware/jwtAuth.ts))
 3. controller에서 발생하는 에러를 핸들링하였습니다.([errorHandle](https://github.com/YeonghunKO/chat-app-server/blob/master/utils/errorHandle.ts))
 4. 날짜별로 메시지를 묶어서 프론트에 넘겨주었습니다([getMessages](https://github.com/YeonghunKO/chat-app-server/blob/master/controller/MessageController.ts))
-   - 이로써 프론트는 날짜별로 일일이 필터링 할 필요없어졌습니다.    
+   - 이로써 프론트는 날짜별로 일일이 필터링 할 필요없어졌습니다.
+5. uri 구조를 개선했습니다
+   - uri 안에 있는 있는 동사(ex> get-messages)는 http method로 대신하였습니다.
 
 <br>
+
+## 🚀 배포
+
+- [배포 링크](https://api.chat-app.live)
 
 ## 🤖기술 스택
 
@@ -31,7 +37,6 @@ _**아래는 클론코드 강의에 없는 기능이지만 필요하다고 생�
 - express.js
 - prisma
 - jsonwebtoken
-- simple-peer
 - socket.io
 
 ## 🔑 실행방법
@@ -51,6 +56,5 @@ DATABASE_URL="postgresql://postgres:koil132123451234@db.xpdqxuuljksmrjhubmtn.sup
 
 ```cmd
 $ npm install
-$ redis-server
 $ npm run start
 ```

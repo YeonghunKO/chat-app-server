@@ -22,9 +22,7 @@ _**아래는 클론코드 강의에 없는 기능이지만 필요하다고 생�
 4. 날짜별로 메시지를 묶어서 프론트에 넘겨주었습니다([getMessages](https://github.com/YeonghunKO/chat-app-server/blob/master/controller/MessageController.ts))
    - 이로써 프론트는 날짜별로 일일이 필터링 할 필요없어졌습니다.
 5. uri 구조를 개선했습니다
-   - uri 안에 있는 있는 동사(ex> get-messages)는 http method로 대신하였습니다.
-
-<br>
+   - uri 안에 있는 있는 동사(ex> get-messages)는 [http method로 대신](https://github.com/YeonghunKO/chat-app-server/commit/a64971505fcab61c3c0ea72d71cc178518466e20)하였습니다.
 
 ## 🚀 배포
 

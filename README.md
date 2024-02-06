@@ -39,6 +39,13 @@ _**아래는 클론코드 강의에 없는 기능이지만 필요하다고 생�
 - nginx
 - certbot
 
+## TIL
+- [2주간의 삽질](https://velog.io/@yhko1992/%EC%A7%80%EB%82%9C-%ED%95%9C%EB%8B%AC%EA%B0%84-%EC%82%BD%EC%A7%88%EC%9D%98-%EA%B8%B0%EB%A1%9D)
+- [http에 ssl 적용](https://velog.io/@yhko1992/http%EC%97%90-ssl%EC%A0%81%EC%9A%A9%ED%95%98%EC%97%AC-https%EB%A1%9C-%EB%A7%8C%EB%93%A4%EC%96%B4%EC%A3%BC%EA%B8%B0)
+- [oracle cloud에 서버 배포](https://velog.io/@yhko1992/oracle-vc%EC%97%90%EC%84%9C-%ED%8F%AC%ED%8A%B8%EB%A5%BC-%EC%97%B4%EC%96%B4%EC%A3%BC%EA%B3%A0-%EB%B0%A9%ED%99%94%EB%B2%BD-%ED%97%88%EC%9A%A9%ED%95%98%EA%B8%B0)
+- [쿠키에 대해서](https://velog.io/@yhko1992/%EC%BF%A0%ED%82%A4%EC%97%90-%EB%8C%80%ED%95%B4-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90)
+- [css - transform을 사용하여 버벅거리는 현상 제거](https://velog.io/@yhko1992/%EB%B2%84%EB%B2%85%EA%B1%B0%EB%A6%AC%EB%8A%94-%ED%98%84%EC%83%81-%ED%95%B4%EA%B2%B0)
+
 ## 🔑 실행방법
 
 .env를 만들고 아래 환경변수를 추가합니다

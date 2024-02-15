@@ -123,7 +123,7 @@ export const signIn = async (
   try {
     const { email, name, profilePicture, loginType, password } = req.body;
     if (!email) {
-      return res.status(403).json({ message: "Email is required" });
+      return res.status(401).json({ ok: false, message: "Email is required" });
     }
 
     const prisma = getPrismaInstance();

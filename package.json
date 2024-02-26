@@ -6,7 +6,8 @@
     "studio": "prisma studio",
     "build:prod": "webpack --config webpack.config.js --mode production",
     "start:prod": "nodemon --exec 'ts-node' ./dist/bundle.js",
-    "redis": "redis-server"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@prisma/client": "^4.14.0",
@@ -24,11 +25,15 @@
   },
   "devDependencies": {
     "@babel/core": "^7.23.7",
+    "@babel/preset-env": "^7.23.9",
+    "@babel/preset-typescript": "^7.23.3",
     "@types/cookie-parser": "^1.4.3",
     "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/multer": "^1.4.7",
     "@types/node": "^20.5.0",
+    "jest": "^29.7.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3",
     "webpack": "^5.89.0",

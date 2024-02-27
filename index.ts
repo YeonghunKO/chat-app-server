@@ -12,6 +12,7 @@ import MessageRoutes from "./routes/MessageRoutes";
 import errorHandle from "./utils/errorHandle";
 import { TOnlineUser, onlineUsers } from "./utils/onlineUser";
 import { IUserInfo } from "./type/user";
+import { addUser } from "./socket/call";
 
 dotenv.config();
 
@@ -46,7 +47,7 @@ const server = app.listen(process.env.PORT, () => {
   console.log(`server is listening to ${process.env.PORT}`);
 });
 
-const io = new Server(server, {
+export const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL,
     credentials: true,
@@ -54,44 +55,7 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  socket.on("add-user", ({ me }: { me: number }) => {
-    if (me) {
-      onlineUsers.setUserValueById({
-        userId: me,
-        value: {
-          chatRoomId: null,
-          socketId: socket.id,
-        },
-      });
-      const users = Array.from(onlineUsers.onlineUsersData);
-      const currentChatUser = users.find(
-        ([userId, { chatRoomId, socketId }]) => chatRoomId === me
-      );
-      io.emit("get-onlineUsers", {
-        onlineUsers: JSON.stringify(users),
-      });
-
-      // chat container에 상대방이 로그인하면 delivered가 표시하게끔
-      if (currentChatUser) {
-        const [currentChatUserId, { socketId }] = currentChatUser;
-        socket.to(socketId).emit("recieve-msg", {
-          from: me,
-          to: currentChatUserId,
-        });
-
-        setTimeout(() => {
-          socket.to(socketId).emit("update-chat-list-status", {
-            to: currentChatUserId,
-          });
-        }, 500);
-      }
-      setTimeout(() => {
-        socket.emit("update-my-chat-list-status", {
-          to: me,
-        });
-      }, 500);
-    }
-  });
+  socket.on("add-user", (arg) => addUser(arg, socket));
 
   socket.on(
     "set-onlineUsers",

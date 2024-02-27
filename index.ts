@@ -173,22 +173,22 @@ io.on("connection", (socket) => {
     if (!userToCallSocketId) {
       return;
     }
-    if (userToCallSocketId) {
-      socket.to(userToCallSocketId).emit("callAccepted", signal);
-    }
+    socket.to(userToCallSocketId).emit("callAccepted", signal);
   });
 
   socket.on("rejectCall", ({ to }: { to: number }) => {
     const userToCallSocketId = onlineUsers.getSocketIdByUserId(to);
-    if (userToCallSocketId) {
-      socket.to(userToCallSocketId).emit("callRejected");
+    if (!userToCallSocketId) {
+      return;
     }
+    socket.to(userToCallSocketId).emit("callRejected");
   });
 
   socket.on("cancelCall", ({ to }: { to: number }) => {
     const userToCallSocketId = onlineUsers.getSocketIdByUserId(to);
-    if (userToCallSocketId) {
-      socket.to(userToCallSocketId).emit("callCanceled");
+    if (!userToCallSocketId) {
+      return;
     }
+    socket.to(userToCallSocketId).emit("callCanceled");
   });
 });

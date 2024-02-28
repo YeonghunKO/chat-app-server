@@ -12,7 +12,7 @@ import MessageRoutes from "./routes/MessageRoutes";
 import errorHandle from "./utils/errorHandle";
 import { TOnlineUser, onlineUsers } from "./utils/onlineUser";
 import { IUserInfo } from "./type/user";
-import { addUser } from "./socket/call";
+import { addUser } from "./socket/user";
 
 dotenv.config();
 
@@ -69,8 +69,6 @@ io.on("connection", (socket) => {
     }
   );
 
-  // client에서 send-msg 보낸것을 서버에서 받은다음 다시 서버에서 클라이언트로 recieve-msg를 전송한다.
-  // 그럼 client에서 recieve-msg를 받는다.
   socket.on(
     "send-msg",
     ({
@@ -86,7 +84,7 @@ io.on("connection", (socket) => {
 
       if (isOtherLoggedIn && otherSocketId) {
         // priviate room 을 만들려면 socketId를 to에 pass하면 됨.
-        socket.to(otherSocketId).emit("recieve-msg", {
+        socket.to(otherSocketId).emit("get-updated-messages", {
           from: me,
           to: other,
         });
@@ -110,7 +108,7 @@ io.on("connection", (socket) => {
     const otherSocketId = onlineUsers.getSocketIdByUserId(to);
 
     if (otherSocketId) {
-      socket.to(otherSocketId).emit("update-message-read", {
+      socket.to(otherSocketId).emit("get-updated-messages", {
         from,
         to,
       });

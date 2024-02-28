@@ -94,13 +94,12 @@ io.on("connection", (socket) => {
             to: other,
           });
         }, 500);
+        setTimeout(() => {
+          socket.emit("update-chat-list-status", {
+            to: me,
+          });
+        }, 500);
       }
-      // 이렇게 하면 나한테만 보내게 됨.
-      setTimeout(() => {
-        socket.emit("update-my-chat-list-status", {
-          to: me,
-        });
-      }, 500);
     }
   );
 
@@ -118,12 +117,12 @@ io.on("connection", (socket) => {
           to,
         });
       }, 500);
+      setTimeout(() => {
+        socket.emit("update-chat-list-status", {
+          to: from,
+        });
+      }, 500);
     }
-    setTimeout(() => {
-      socket.emit("update-my-chat-list-status", {
-        to: from,
-      });
-    }, 500);
   });
 
   socket.on("disconnecting", () => {

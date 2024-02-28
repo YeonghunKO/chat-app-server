@@ -46,14 +46,12 @@ const addUser = (
         to: currentChatUserId,
       });
     }, 500);
+    setTimeout(() => {
+      socket.emit("update-chat-list-status", {
+        to: me,
+      });
+    }, 500);
   }
-
-  // update-chat-list-status arg
-  setTimeout(() => {
-    socket.emit("update-chat-list-status", {
-      to: me,
-    });
-  }, 500);
 };
 
 export { addUser };

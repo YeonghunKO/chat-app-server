@@ -2,6 +2,7 @@ import { type DefaultEventsMap } from "socket.io/dist/typed-events";
 import { io } from "../index";
 import { onlineUsers } from "../utils/onlineUser";
 import { type Socket } from "socket.io";
+import { updateChatList } from "./common";
 
 const addUser = (
   { me }: { me: number },
@@ -28,29 +29,14 @@ const addUser = (
     onlineUsers: JSON.stringify(users),
   });
 
-  // update count of unread messages in chat list and message status
-  // 아래 로직을 common 폴더에 분리해보기. (srp)
   if (currentChatUser) {
-    // condition
     const [currentChatUserId, { socketId }] = currentChatUser;
 
-    // recieve msg arg
-    socket.to(socketId).emit("get-updated-messages", {
+    updateChatList(socket, {
       from: me,
       to: currentChatUserId,
+      otherSocketId: socketId,
     });
-
-    // update-chat-list-status arg
-    setTimeout(() => {
-      socket.to(socketId).emit("update-chat-list-status", {
-        to: currentChatUserId,
-      });
-    }, 500);
-    setTimeout(() => {
-      socket.emit("update-chat-list-status", {
-        to: me,
-      });
-    }, 500);
   }
 };
 

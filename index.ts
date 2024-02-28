@@ -13,6 +13,7 @@ import errorHandle from "./utils/errorHandle";
 import { TOnlineUser, onlineUsers } from "./utils/onlineUser";
 import { IUserInfo } from "./type/user";
 import { addUser } from "./socket/user";
+import { updateChatList } from "./socket/common";
 
 dotenv.config();
 
@@ -84,21 +85,7 @@ io.on("connection", (socket) => {
 
       if (isOtherLoggedIn && otherSocketId) {
         // priviate room 을 만들려면 socketId를 to에 pass하면 됨.
-        socket.to(otherSocketId).emit("get-updated-messages", {
-          from: me,
-          to: other,
-        });
-
-        setTimeout(() => {
-          socket.to(otherSocketId).emit("update-chat-list-status", {
-            to: other,
-          });
-        }, 500);
-        setTimeout(() => {
-          socket.emit("update-chat-list-status", {
-            to: me,
-          });
-        }, 500);
+        updateChatList(socket, { from: me, to: other, otherSocketId });
       }
     }
   );
@@ -106,23 +93,14 @@ io.on("connection", (socket) => {
   socket.on("mark-read", ({ to, from }: { to: number; from: number }) => {
     const otherSocketId = onlineUsers.getSocketIdByUserId(to);
 
-    if (otherSocketId) {
-      socket.to(otherSocketId).emit("get-updated-messages", {
-        from,
-        to,
-      });
-
-      setTimeout(() => {
-        socket.to(otherSocketId).emit("update-chat-list-status", {
-          to,
-        });
-      }, 500);
-      setTimeout(() => {
-        socket.emit("update-chat-list-status", {
-          to: from,
-        });
-      }, 500);
+    if (!otherSocketId) {
+      return;
     }
+    updateChatList(socket, {
+      from,
+      to,
+      otherSocketId,
+    });
   });
 
   socket.on("disconnecting", () => {

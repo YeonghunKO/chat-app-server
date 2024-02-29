@@ -6,8 +6,8 @@
     "studio": "prisma studio",
     "build:prod": "webpack --config webpack.config.js --mode production",
     "start:prod": "nodemon --exec 'ts-node' ./dist/bundle.js",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "jest --detectOpenHandles",
+    "test:watch": "jest --watch --detectOpenHandles"
   },
   "dependencies": {
     "@prisma/client": "^4.14.0",

@@ -89,6 +89,10 @@ class OnlineUser implements IOnlineUser {
   deleteUser(userId: number) {
     this.onlineUsers.delete(userId);
   }
+
+  clearAllUsers() {
+    this.onlineUsers.clear();
+  }
 }
 
 const onlineUsers = new OnlineUser();

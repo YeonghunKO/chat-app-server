@@ -4,6 +4,23 @@ import { onlineUsers } from "../utils/onlineUser";
 import { type Socket } from "socket.io";
 import { updateChatList } from "./common";
 
+const setNewUser = (me: number, socketId: string) => {
+  onlineUsers.setUserValueById({
+    userId: me,
+    value: {
+      chatRoomId: null,
+      socketId,
+    },
+  });
+
+  const loggedInUsers = Array.from(onlineUsers.onlineUsersData);
+  const userChattingWithMe = loggedInUsers.find(
+    ([userId, { chatRoomId, socketId }]) => chatRoomId === me
+  );
+
+  return { userChattingWithMe, loggedInUsers };
+};
+
 const addUser = (
   { me }: { me: number },
   socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>
@@ -11,33 +28,22 @@ const addUser = (
   if (!me) {
     return;
   }
-  // set online users soon as logged in
-  onlineUsers.setUserValueById({
-    userId: me,
-    value: {
-      chatRoomId: null,
-      socketId: socket.id,
-    },
-  });
-  const users = Array.from(onlineUsers.onlineUsersData);
-  const currentChatUser = users.find(
-    ([userId, { chatRoomId, socketId }]) => chatRoomId === me
-  );
 
-  // send users updated online users
+  const { loggedInUsers, userChattingWithMe } = setNewUser(me, socket.id);
+
   io.emit("get-onlineUsers", {
-    onlineUsers: JSON.stringify(users),
+    onlineUsers: JSON.stringify(loggedInUsers),
   });
 
-  if (currentChatUser) {
-    const [currentChatUserId, { socketId }] = currentChatUser;
+  if (userChattingWithMe) {
+    const [userId, { socketId }] = userChattingWithMe;
 
     updateChatList(socket, {
       from: me,
-      to: currentChatUserId,
+      to: userId,
       otherSocketId: socketId,
     });
   }
 };
 
-export { addUser };
+export { addUser, setNewUser };

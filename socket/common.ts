@@ -13,17 +13,20 @@ const updateChatList = (
     to: number;
   }
 ) => {
-  socket.to(otherSocketId).emit("get-updated-messages", {
-    from,
-    to,
-  });
-
-  setTimeout(() => {
-    socket.to(otherSocketId).emit("update-chat-list-status", {
+  if (otherSocketId) {
+    socket.to(otherSocketId).emit("get-updated-messages", {
+      from,
       to,
     });
-  }, 500);
+
+    setTimeout(() => {
+      socket.to(otherSocketId).emit("update-chat-list-status", {
+        to,
+      });
+    }, 500);
+  }
   setTimeout(() => {
+    // send socket to me
     socket.emit("update-chat-list-status", {
       to: from,
     });

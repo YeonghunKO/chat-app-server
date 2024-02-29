@@ -44,7 +44,7 @@ app.use("/auth", AuthRoutes);
 app.use("/message", MessageRoutes);
 
 app.use(errorHandle);
-const server = app.listen(process.env.PORT, () => {
+export const server = app.listen(process.env.PORT, () => {
   console.log(`server is listening to ${process.env.PORT}`);
 });
 
@@ -80,22 +80,13 @@ io.on("connection", (socket) => {
       from: number;
       message: string;
     }) => {
-      const isOtherLoggedIn = onlineUsers.isUserLoggedIn(other);
       const otherSocketId = onlineUsers.getSocketIdByUserId(other);
-
-      if (isOtherLoggedIn && otherSocketId) {
-        // priviate room 을 만들려면 socketId를 to에 pass하면 됨.
-        updateChatList(socket, { from: me, to: other, otherSocketId });
-      }
+      updateChatList(socket, { from: me, to: other, otherSocketId });
     }
   );
 
   socket.on("mark-read", ({ to, from }: { to: number; from: number }) => {
     const otherSocketId = onlineUsers.getSocketIdByUserId(to);
-
-    if (!otherSocketId) {
-      return;
-    }
     updateChatList(socket, {
       from,
       to,

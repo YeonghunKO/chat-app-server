@@ -13,7 +13,7 @@ import initSocket from "./socket";
 
 dotenv.config();
 
-const app = express();
+export const app = express();
 app.set("trust proxy", true); // trust first proxy
 
 if (process.env.NODE_ENV !== "production") {

@@ -1,4 +1,4 @@
-const mockedPrismaDB: any[] = [];
+import { mockedPrismaDB } from "./fixtures/mockedPrismaDB";
 
 jest.mock("../utils/PrismaClient", () => ({
   __esModule: true,

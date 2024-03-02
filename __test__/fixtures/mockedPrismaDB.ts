@@ -1,16 +1,23 @@
-interface IUserInfo {
+export interface IUserInfo {
   id: number | null;
   email: string | null;
   name: string | null;
   profilePicture: string | null;
   about?: string;
-  password: string;
+  password?: string;
   refreshToken: string;
   sentMessage: IMessages[];
   recievedMessage: IMessages[];
 }
 
-interface IMessages {
+export interface IUserCreateInfo {
+  email: string | null;
+  name: string | null;
+  about?: string;
+  password?: string;
+}
+
+export interface IMessages {
   id: number;
   sender: IUserInfo;
   senderId: number;

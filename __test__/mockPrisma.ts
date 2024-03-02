@@ -5,7 +5,23 @@ jest.mock("../utils/PrismaClient", () => ({
   default: jest.fn(() => ({
     user: {
       create: async (userData: any) => {
-        mockedPrismaUserDB.push(userData);
+        const {
+          data: {
+            refreshToken: {
+              create: { value: refreshToken },
+            },
+            ...userInfo
+          },
+        } = userData;
+
+        console.log("userData", userData);
+
+        mockedPrismaUserDB.push({
+          ...userInfo,
+          id: Math.random() * Number.MAX_SAFE_INTEGER,
+          refreshToken,
+        });
+
         return mockedPrismaUserDB;
       },
     },

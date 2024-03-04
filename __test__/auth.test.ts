@@ -63,6 +63,24 @@ describe("auth", () => {
       const errorMessage = response.body.message;
       expect(errorMessage).toBe("user does not exist");
     });
+
+    it("given registered user but type wrong password", async () => {
+      // arrange
+      registerUser(MOCKED_NEW_USER);
+
+      // act
+      const response = await request(app)
+        .post("/auth/sign-in")
+        .send({
+          email: MOCKED_NEW_USER.email,
+          password: "wrong-password",
+        })
+        .expect(401);
+      // assert
+
+      const errorMessage = response.body.message;
+      expect(errorMessage).toBe("password is incorrect");
+    });
   });
 
   describe("signUp", () => {

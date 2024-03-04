@@ -47,18 +47,4 @@ describe("auth", () => {
       expect(registeredUserEmail).toBe(MOCKED_NEW_USER.email);
     });
   });
-
-  it("supertest", async () => {
-    const response = await request(app)
-      .post("/auth/test/3")
-      .send({
-        name: "고짝돌",
-        about: "공남이 친구",
-        password: "짝짝",
-        id: "test",
-      })
-      .expect(201);
-
-    console.log("response.body", response.body);
-  });
 });

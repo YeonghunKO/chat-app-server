@@ -31,12 +31,26 @@ describe("auth", () => {
   });
 
   describe("signIn", () => {
-    it("given the user and password are valid", () => {
+    it.only("given the user and password are valid", async () => {
+      // arrange
       registerUser(MOCKED_NEW_USER);
+
+      // act
+      const response = await request(app)
+        .post("/auth/sign-in")
+        .send({
+          email: MOCKED_NEW_USER.email,
+          password: MOCKED_NEW_USER.password,
+        })
+        .expect(201);
+
+      // assert
+      const signedInUser = response.body.user.email;
+      expect(signedInUser).toBe(MOCKED_NEW_USER.email);
     });
   });
 
-  describe.only("signUp", () => {
+  describe("signUp", () => {
     it("given the new user", async () => {
       // arrange and act
       const response = await request(app)

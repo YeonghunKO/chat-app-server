@@ -31,7 +31,7 @@ describe("auth", () => {
   });
 
   describe("signIn", () => {
-    it.only("given the user and password are valid", async () => {
+    it("given the user and password are valid", async () => {
       // arrange
       registerUser(MOCKED_NEW_USER);
 
@@ -47,6 +47,21 @@ describe("auth", () => {
       // assert
       const signedInUser = response.body.user.email;
       expect(signedInUser).toBe(MOCKED_NEW_USER.email);
+    });
+
+    it("given the unregistered user", async () => {
+      // arrange and act
+      const response = await request(app)
+        .post("/auth/sign-in")
+        .send({
+          email: MOCKED_NEW_USER.email,
+          password: MOCKED_NEW_USER.password,
+        })
+        .expect(401);
+
+      // assert
+      const errorMessage = response.body.message;
+      expect(errorMessage).toBe("user does not exist");
     });
   });
 

@@ -5,8 +5,6 @@ const errorHandle = (
   res: Response,
   next: NextFunction
 ) => {
-  console.error("err", error);
-
   if (error.code) {
     switch (error.code) {
       case "P2002":
@@ -25,7 +23,7 @@ const errorHandle = (
   } else {
     return res.status(503).json({
       error,
-      message: `서버에 문제가 발생했어요. 서버 로그를 확인해주세요`,
+      message: `서버에 문제가 발생했어요. 서버 로그를 확인해주세요 ${error}`,
     });
   }
 };

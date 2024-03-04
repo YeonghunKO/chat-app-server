@@ -1,6 +1,6 @@
-import { mockedPrismaUserDB } from "./fixtures/mockedPrismaDB";
+import { mockedPrismaUserDB } from "../fixtures/mockedPrismaDB";
 
-jest.mock("../utils/PrismaClient", () => ({
+jest.mock("../../utils/PrismaClient", () => ({
   __esModule: true,
   default: jest.fn(() => ({
     user: {

@@ -26,7 +26,6 @@ const MOCKED_NEW_USER = {
 describe("auth", () => {
   beforeEach(() => {
     server.close();
-    // console.log("afterEach mockedPrismaUserDB", mockedPrismaUserDB);
     mockedPrismaUserDB.clear();
   });
 
@@ -106,7 +105,6 @@ describe("auth", () => {
         .send(MOCKED_NEW_USER)
         .expect(503);
 
-      // console.log("already registered response", response);
       // assert
       const errorMessage = JSON.parse(response.text).message;
       const expected = [expect.stringMatching(/User already registered/i)];

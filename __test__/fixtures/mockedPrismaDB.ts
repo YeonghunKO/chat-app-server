@@ -30,4 +30,4 @@ export interface IMessages {
 }
 
 export const mockedPrismaUserDB: Map<string, IUserInfo> = new Map();
-export const mockedPrismaMessagesDB: Map<string, IUserInfo> = new Map();
+export const mockedPrismaMessagesDB: IMessages[] = [];

@@ -29,4 +29,4 @@ export interface IMessages {
   createdAt: string;
 }
 
-export const mockedPrismaUserDB: IUserInfo[] = [];
+export const mockedPrismaUserDB: Map<string, IUserInfo> = new Map();

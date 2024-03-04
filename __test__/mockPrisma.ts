@@ -14,15 +14,15 @@ jest.mock("../utils/PrismaClient", () => ({
           },
         } = userData;
 
-        const isMockedNewUserRegistered = mockedPrismaUserDB.find(
-          (user) => user.email === userInfo.email
+        const isMockedNewUserRegistered = mockedPrismaUserDB.get(
+          userInfo.email
         );
 
         if (isMockedNewUserRegistered) {
           throw new Error("User already registered");
         }
 
-        mockedPrismaUserDB.push({
+        mockedPrismaUserDB.set(userInfo.email, {
           ...userInfo,
           id: Math.random() * Number.MAX_SAFE_INTEGER,
           refreshToken,

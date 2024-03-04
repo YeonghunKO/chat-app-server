@@ -6,7 +6,7 @@ import {
 } from "./fixtures/mockedPrismaDB";
 
 const registerUser = (userInfo: IUserCreateInfo) => {
-  mockedPrismaUserDB.push({
+  mockedPrismaUserDB.set(userInfo.email, {
     ...userInfo,
     recievedMessage: [],
     refreshToken: null,
@@ -24,8 +24,10 @@ const MOCKED_NEW_USER = {
 };
 
 describe("auth", () => {
-  afterEach(() => {
+  beforeEach(() => {
     server.close();
+    // console.log("afterEach mockedPrismaUserDB", mockedPrismaUserDB);
+    mockedPrismaUserDB.clear();
   });
 
   describe("signIn", () => {
@@ -34,7 +36,7 @@ describe("auth", () => {
     });
   });
 
-  describe("signUp", () => {
+  describe.only("signUp", () => {
     it("given the new user", async () => {
       // arrange and act
       const response = await request(app)
@@ -45,6 +47,24 @@ describe("auth", () => {
       // assert
       const registeredUserEmail = response.body.user.email;
       expect(registeredUserEmail).toBe(MOCKED_NEW_USER.email);
+    });
+
+    it("given the already registered user", async () => {
+      // arrange
+      registerUser(MOCKED_NEW_USER);
+
+      // act
+      const response = await request(app)
+        .post("/auth/sign-up")
+        .send(MOCKED_NEW_USER)
+        .expect(503);
+
+      // console.log("already registered response", response);
+      // assert
+      const errorMessage = JSON.parse(response.text).message;
+      const expected = [expect.stringMatching(/User already registered/i)];
+
+      expect([errorMessage]).toEqual(expect.arrayContaining(expected));
     });
   });
 });

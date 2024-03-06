@@ -7,7 +7,6 @@ import {
 } from "../controller/AuthController";
 import { Router } from "express";
 
-import getPrismaInstance from "../utils/PrismaClient";
 import { validateToken } from "../middleware/validateToken";
 
 const router = Router();

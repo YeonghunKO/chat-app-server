@@ -13,6 +13,7 @@ const setNewUser = (me: number, socketId: string) => {
     },
   });
 
+  // 데이터
   const loggedInUsers = Array.from(onlineUsers.onlineUsersData);
   const userChattingWithMe = loggedInUsers.find(
     ([userId, { chatRoomId, socketId }]) => chatRoomId === me
@@ -29,8 +30,10 @@ const addUser = (
     return;
   }
 
+  // 계산
   const { loggedInUsers, userChattingWithMe } = setNewUser(me, socket.id);
 
+  // 액션
   io.emit("get-onlineUsers", {
     onlineUsers: JSON.stringify(loggedInUsers),
   });

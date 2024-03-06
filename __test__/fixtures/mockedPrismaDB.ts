@@ -29,7 +29,7 @@ export interface IMessages {
   createdAt: string;
 }
 
-const AEIKA_USER = {
+export const AEIKA_USER = {
   id: 7,
   email: "aeika@gmail.com",
   about: "I'm the boss",
@@ -37,7 +37,7 @@ const AEIKA_USER = {
   name: "aeika ahsek",
 };
 
-const SINKYO_USER = {
+export const SINKYO_USER = {
   id: 3,
   email: "yhko1988@gmail.com",
   about: "",
@@ -46,7 +46,7 @@ const SINKYO_USER = {
   name: "KIKI KEN",
 };
 
-const BEN_USER = {
+export const BEN_USER = {
   id: 11,
   email: "ben@gmail.com",
   about: "i love harry",

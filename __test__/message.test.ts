@@ -5,27 +5,41 @@ import {
   IMessages,
   SINKYO_USER,
   AEIKA_USER,
+  mockedPrismaUserDB,
 } from "./fixtures/mockedPrismaDB";
+import { signAccess, signRefresh } from "../middleware/jwtAuth";
 
 describe("message", () => {
+  let accessToken: string;
+  let refreshToken: string;
+  const SENDER = SINKYO_USER;
+  const RECIEVER = AEIKA_USER;
+
   beforeEach(() => {
+    accessToken = signAccess(SENDER.email);
+    refreshToken = signRefresh(SENDER.email);
+    mockedPrismaUserDB.set(SENDER.email, SENDER);
     server.close();
   });
 
   afterEach(() => {
     mockedPrismaMessagesDB.length = 0;
   });
+
   describe("get", () => {
     it("given from and to are passsed", async () => {
       // arrange
-      const SENDER_ID = SINKYO_USER.id;
-      const RECIEVER_ID = AEIKA_USER.id;
+      const SENDER_ID = SENDER.id;
+      const RECIEVER_ID = RECIEVER.id;
 
       // act
       const response = await request(app)
         .get(`/message/from/${SENDER_ID}/to/${RECIEVER_ID}`)
+        .set(
+          "Cookie",
+          `accessToken=${accessToken};refreshTokenIdx=${SENDER.email}`
+        )
         .expect(201);
-
       // assert
       const [date, messages] = response.body[0];
 
@@ -47,6 +61,10 @@ describe("message", () => {
       // arrange and act
       const response = await request(app)
         .get(`/message/from/undefined/to/undefined`)
+        .set(
+          "Cookie",
+          `accessToken=${accessToken};refreshTokenIdx=${SENDER.email}`
+        )
         .expect(401);
 
       const errMessage = response.body.message;

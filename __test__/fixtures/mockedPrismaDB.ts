@@ -64,7 +64,7 @@ export const mockedPrismaMessagesDB: IMessages[] = [
     reciever: AEIKA_USER,
     message: "hey",
     type: "text",
-    status: "read",
+    status: "sent",
     createdAt: "2023-12-07T01:32:41.076Z",
   },
   {
@@ -97,7 +97,7 @@ export const mockedPrismaMessagesDB: IMessages[] = [
     reciever: SINKYO_USER,
     message: "sub",
     type: "text",
-    status: "read",
+    status: "sent",
     createdAt: "2023-12-07T02:03:44.847Z",
   },
   {
@@ -108,7 +108,7 @@ export const mockedPrismaMessagesDB: IMessages[] = [
     reciever: SINKYO_USER,
     message: "d",
     type: "text",
-    status: "read",
+    status: "sent",
     createdAt: "2023-12-07T02:06:01.609Z",
   },
   {
@@ -119,7 +119,7 @@ export const mockedPrismaMessagesDB: IMessages[] = [
     reciever: AEIKA_USER,
     message: "fw",
     type: "text",
-    status: "read",
+    status: "sent",
     createdAt: "2023-12-07T02:06:22.117Z",
   },
 ];

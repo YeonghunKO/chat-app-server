@@ -16,7 +16,7 @@ describe("message", () => {
     mockedPrismaMessagesDB.length = 0;
   });
   describe("get", () => {
-    it.only("given from and to are passsed", async () => {
+    it("given from and to are passsed", async () => {
       // arrange
       const SENDER_ID = SINKYO_USER.id;
       const RECIEVER_ID = AEIKA_USER.id;
@@ -43,7 +43,17 @@ describe("message", () => {
       expect(isMessageBetweenSenderAndReciever).toBe(true);
     });
 
-    it("given from and to are not passsed", async () => {});
+    it("given from and to are not passsed", async () => {
+      // arrange and act
+      const response = await request(app)
+        .get(`/message/from/undefined/to/undefined`)
+        .expect(401);
+
+      const errMessage = response.body.message;
+
+      // assert
+      expect(errMessage).toBe("from and to are required");
+    });
   });
   describe("add", () => {});
 });

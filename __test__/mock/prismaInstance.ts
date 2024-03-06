@@ -1,4 +1,7 @@
-import { mockedPrismaUserDB } from "../fixtures/mockedPrismaDB";
+import {
+  mockedPrismaUserDB,
+  mockedPrismaMessagesDB,
+} from "../fixtures/mockedPrismaDB";
 
 jest.mock("../../utils/PrismaClient", () => ({
   __esModule: true,
@@ -58,6 +61,41 @@ jest.mock("../../utils/PrismaClient", () => ({
           refreshToken: refreshToken,
         });
       },
+    },
+    messages: {
+      findMany: async (findArgs: {
+        where: {
+          OR: {
+            senderId: number;
+            recieverId: number;
+          }[];
+        };
+        orderBy: {
+          createdAt: string;
+        };
+      }) => {
+        const { recieverId, senderId } = findArgs.where.OR[0];
+
+        const filteredMessages = mockedPrismaMessagesDB.filter((message) => {
+          return (
+            (+message.recieverId === +recieverId &&
+              +message.senderId === +senderId) ||
+            (+message.recieverId === +senderId &&
+              +message.senderId === +recieverId)
+          );
+        });
+
+        filteredMessages.sort((AMessage, BMessage) => {
+          return (
+            new Date(AMessage.createdAt).valueOf() -
+            new Date(BMessage.createdAt).valueOf()
+          );
+        });
+
+        return filteredMessages;
+      },
+      updateMany: async () => {},
+      create: async () => {},
     },
   })),
 }));

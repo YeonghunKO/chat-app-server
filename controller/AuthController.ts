@@ -163,7 +163,7 @@ export const signIn = async (
 
     res.cookie(COOKIE.ACCESS_TOKEN, accessToken);
 
-    res.cookie(COOKIE.REFRESH_IDX, encodeURIComponent(email));
+    res.cookie(COOKIE.REFRESH_IDX, email);
 
     return res.status(201).json({
       user: {
@@ -207,7 +207,7 @@ export const onSignUpUser = async (
 
     res.cookie(COOKIE.ACCESS_TOKEN, accessToken);
 
-    res.cookie(COOKIE.REFRESH_IDX, encodeURIComponent(email));
+    res.cookie(COOKIE.REFRESH_IDX, email);
 
     return res.status(201).json({
       user: {

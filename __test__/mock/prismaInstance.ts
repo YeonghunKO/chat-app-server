@@ -1,6 +1,7 @@
 import {
   mockedPrismaUserDB,
   mockedPrismaMessagesDB,
+  type IMessages,
 } from "../fixtures/mockedPrismaDB";
 
 jest.mock("../../utils/PrismaClient", () => ({
@@ -70,11 +71,10 @@ jest.mock("../../utils/PrismaClient", () => ({
             recieverId: number;
           }[];
         };
-        orderBy: {
-          createdAt: string;
-        };
+        orderBy: keyof IMessages;
       }) => {
         const { recieverId, senderId } = findArgs.where.OR[0];
+        const { orderBy } = findArgs;
 
         const filteredMessages = mockedPrismaMessagesDB.filter((message) => {
           return (
@@ -85,12 +85,21 @@ jest.mock("../../utils/PrismaClient", () => ({
           );
         });
 
-        filteredMessages.sort((AMessage, BMessage) => {
-          return (
-            new Date(AMessage.createdAt).valueOf() -
-            new Date(BMessage.createdAt).valueOf()
-          );
-        });
+        if (orderBy) {
+          switch (orderBy) {
+            case "createdAt":
+              filteredMessages.sort((AMessage, BMessage) => {
+                return (
+                  new Date(AMessage[orderBy]).valueOf() -
+                  new Date(BMessage.createdAt).valueOf()
+                );
+              });
+              break;
+
+            default:
+              break;
+          }
+        }
 
         return filteredMessages;
       },

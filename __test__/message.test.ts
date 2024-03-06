@@ -2,19 +2,45 @@ import request from "supertest";
 import { app, server } from "..";
 import {
   mockedPrismaMessagesDB,
-  type IUserCreateInfo,
+  IMessages,
+  SINKYO_USER,
+  AEIKA_USER,
 } from "./fixtures/mockedPrismaDB";
 
 describe("message", () => {
   beforeEach(() => {
     server.close();
+  });
+
+  afterEach(() => {
     mockedPrismaMessagesDB.length = 0;
   });
   describe("get", () => {
     it.only("given from and to are passsed", async () => {
-      const resonse = await request(app)
-        .get("/message/from/3/to/7")
+      // arrange
+      const SENDER_ID = SINKYO_USER.id;
+      const RECIEVER_ID = AEIKA_USER.id;
+
+      // act
+      const response = await request(app)
+        .get(`/message/from/${SENDER_ID}/to/${RECIEVER_ID}`)
         .expect(201);
+
+      // assert
+      const [date, messages] = response.body[0];
+
+      const isMessageBetweenSenderAndReciever = (messages as IMessages[]).every(
+        (message) => {
+          return (
+            (message.senderId === SENDER_ID &&
+              message.recieverId === RECIEVER_ID) ||
+            (message.senderId === RECIEVER_ID &&
+              message.recieverId === SENDER_ID)
+          );
+        }
+      );
+
+      expect(isMessageBetweenSenderAndReciever).toBe(true);
     });
 
     it("given from and to are not passsed", async () => {});

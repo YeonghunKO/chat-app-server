@@ -28,13 +28,9 @@ describe("message", () => {
 
   describe("get", () => {
     it("given from and to are passsed", async () => {
-      // arrange
-      const SENDER_ID = SENDER.id;
-      const RECIEVER_ID = RECIEVER.id;
-
-      // act
+      // arrange and act
       const response = await request(app)
-        .get(`/message/from/${SENDER_ID}/to/${RECIEVER_ID}`)
+        .get(`/message/from/${SENDER.id}/to/${RECIEVER.id}`)
         .set(
           "Cookie",
           `accessToken=${accessToken};refreshTokenIdx=${SENDER.email}`
@@ -46,10 +42,10 @@ describe("message", () => {
       const isMessageBetweenSenderAndReciever = (messages as IMessages[]).every(
         (message) => {
           return (
-            (message.senderId === SENDER_ID &&
-              message.recieverId === RECIEVER_ID) ||
-            (message.senderId === RECIEVER_ID &&
-              message.recieverId === SENDER_ID)
+            (message.senderId === SENDER.id &&
+              message.recieverId === RECIEVER.id) ||
+            (message.senderId === RECIEVER.id &&
+              message.recieverId === SENDER.id)
           );
         }
       );

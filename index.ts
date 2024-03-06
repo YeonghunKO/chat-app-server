@@ -10,6 +10,7 @@ import MessageRoutes from "./routes/MessageRoutes";
 
 import errorHandle from "./utils/errorHandle";
 import initSocket from "./socket";
+import { validateToken } from "./middleware/validateToken";
 
 dotenv.config();
 
@@ -37,7 +38,7 @@ app.use("/uploads/recordings", express.static("uploads/recordings"));
 
 // api/auth가 base url이고 AuthRoutes안에 지정된 path가 sub path이다
 app.use("/auth", AuthRoutes);
-app.use("/message", MessageRoutes);
+app.use("/message", validateToken, MessageRoutes);
 
 app.use(errorHandle);
 export const server = app.listen(process.env.PORT, () => {

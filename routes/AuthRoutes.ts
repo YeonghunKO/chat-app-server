@@ -8,6 +8,7 @@ import {
 import { Router } from "express";
 
 import getPrismaInstance from "../utils/PrismaClient";
+import { validateToken } from "../middleware/validateToken";
 
 const router = Router();
 
@@ -15,7 +16,7 @@ const router = Router();
 router.post("/sign-up", onSignUpUser);
 router.post("/sign-in", signIn);
 router.post("/refresh", refresh);
-router.get("/user/:email", getUserInfo);
-router.get("/users", getAllUsers);
+router.get("/user/:email", validateToken, getUserInfo);
+router.get("/users", validateToken, getAllUsers);
 
 export default router;

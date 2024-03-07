@@ -10,6 +10,7 @@ import {
 import { signAccess, signRefresh } from "../middleware/jwtAuth";
 
 describe("message", () => {
+  // arrange
   let accessToken: string;
   let refreshToken: string;
   const SENDER = SINKYO_USER;
@@ -30,7 +31,7 @@ describe("message", () => {
 
   describe("get", () => {
     it.only("given from and to are passsed", async () => {
-      // arrange and act
+      // act
       const response = await request(app)
         .get(`/message/from/${SENDER.id}/to/${RECIEVER.id}`)
         .set(
@@ -56,7 +57,7 @@ describe("message", () => {
     });
 
     it("given from and to are not passsed", async () => {
-      // arrange and act
+      // act
       const response = await request(app)
         .get(`/message/from/undefined/to/undefined`)
         .set(

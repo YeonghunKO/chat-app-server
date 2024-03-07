@@ -24,7 +24,7 @@ export interface IMessages {
   reciever: IUserInfo;
   recieverId: number;
   message: string;
-  type: string;
+  type: "text" | "image" | "audio";
   status: string;
   createdAt: string;
 }

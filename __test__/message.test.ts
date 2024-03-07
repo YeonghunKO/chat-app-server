@@ -18,6 +18,8 @@ describe("message", () => {
   beforeEach(() => {
     accessToken = signAccess(SENDER.email);
     refreshToken = signRefresh(SENDER.email);
+    mockedPrismaUserDB.set(SENDER.email, SENDER);
+    mockedPrismaUserDB.set(RECIEVER.email, RECIEVER);
 
     server.close();
   });

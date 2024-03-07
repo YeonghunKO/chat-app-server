@@ -103,7 +103,29 @@ jest.mock("../../utils/PrismaClient", () => ({
 
         return filteredMessages;
       },
-      updateMany: async () => {},
+
+      updateMany: async (updateArgs: {
+        where: {
+          id: { in: number[] };
+        };
+        data: {
+          status: "read" | "sent" | "delivered";
+        };
+      }) => {
+        const {
+          where: {
+            id: { in: updateIds },
+          },
+          data: { status: updateStatus },
+        } = updateArgs;
+        mockedPrismaMessagesDB.forEach((message) => {
+          if (updateIds.includes(message.id)) {
+            message.status = updateStatus;
+          }
+        });
+
+        return mockedPrismaMessagesDB;
+      },
       create: async () => {},
     },
   })),

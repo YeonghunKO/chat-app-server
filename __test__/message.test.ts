@@ -76,7 +76,7 @@ describe("message", () => {
     });
   });
   describe("add", () => {
-    it.only("given from and to are and newMessage are passed", async () => {
+    it("given from and to are and newMessage are passed", async () => {
       // arrange
       const newMessage = "안녕 난 짝돌이야";
 
@@ -95,9 +95,14 @@ describe("message", () => {
         .expect(201);
 
       // assert
-      const { message, recieverId, senderId } = response.body as IMessages;
+      const { id: newMessageId } = response.body as IMessages;
 
-      expect(message).toBe(newMessage);
+      const {
+        message: addedNewMessage,
+        recieverId,
+        senderId,
+      } = mockedPrismaMessagesDB.find((message) => message.id === newMessageId);
+      expect(addedNewMessage).toBe(newMessage);
       expect(recieverId).toBe(RECIEVER.id);
       expect(senderId).toBe(SENDER.id);
     });

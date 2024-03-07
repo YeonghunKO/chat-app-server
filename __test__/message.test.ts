@@ -2,7 +2,7 @@ import request from "supertest";
 import { app, server } from "..";
 import {
   mockedPrismaMessagesDB,
-  IMessages,
+  type IMessages,
   SINKYO_USER,
   AEIKA_USER,
   mockedPrismaUserDB,
@@ -33,7 +33,7 @@ describe("message", () => {
   });
 
   describe("get", () => {
-    it.only("given from and to are passsed", async () => {
+    it("given from and to are passsed", async () => {
       // act
       const response = await request(app)
         .get(`/message/from/${SENDER.id}/to/${RECIEVER.id}`)
@@ -75,5 +75,31 @@ describe("message", () => {
       expect(errMessage).toBe("from and to are required");
     });
   });
-  describe("add", () => {});
+  describe("add", () => {
+    it.only("given from and to are and newMessage are passed", async () => {
+      // arrange
+      const newMessage = "안녕 난 짝돌이야";
+
+      // act
+      const response = await request(app)
+        .post("/message")
+        .send({
+          from: SENDER.id,
+          to: RECIEVER.id,
+          message: newMessage,
+        })
+        .set(
+          "Cookie",
+          `accessToken=${accessToken};refreshTokenIdx=${SENDER.email}`
+        )
+        .expect(201);
+
+      // assert
+      const { message, recieverId, senderId } = response.body as IMessages;
+
+      expect(message).toBe(newMessage);
+      expect(recieverId).toBe(RECIEVER.id);
+      expect(senderId).toBe(SENDER.id);
+    });
+  });
 });

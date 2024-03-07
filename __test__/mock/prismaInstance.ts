@@ -126,7 +126,68 @@ jest.mock("../../utils/PrismaClient", () => ({
 
         return mockedPrismaMessagesDB;
       },
-      create: async () => {},
+
+      create: async (createArgs: {
+        data: {
+          message: string;
+          status: "read" | "sent" | "delivered,";
+          sender: {
+            connect: { id: number };
+          };
+          reciever: {
+            connect: { id: number };
+          };
+        };
+      }) => {
+        const {
+          data: { message, status },
+        } = createArgs;
+
+        const {
+          data: {
+            sender: {
+              connect: { id: senderId },
+            },
+            reciever: {
+              connect: { id: recieverId },
+            },
+          },
+        } = createArgs;
+
+        const mockedUsersArray = Array(...mockedPrismaUserDB);
+
+        const [foundRecieverEmail, foundReciever] = mockedUsersArray.find(
+          ([email, user]) => {
+            if (user.id === recieverId) {
+              return user;
+            }
+          }
+        );
+
+        const [foundSenderEmail, foundSender] = mockedUsersArray.find(
+          ([email, user]) => {
+            if (user.id === senderId) {
+              return user;
+            }
+          }
+        );
+
+        const newMessageFormat: IMessages = {
+          message,
+          status,
+          id: Math.random() * Number.MAX_SAFE_INTEGER,
+          createdAt: new Date().toISOString(),
+          type: "text",
+          reciever: foundReciever,
+          sender: foundSender,
+          recieverId,
+          senderId,
+        };
+
+        mockedPrismaMessagesDB.push(newMessageFormat);
+
+        return newMessageFormat;
+      },
     },
   })),
 }));

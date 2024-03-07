@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import getPrismaInstance from "../utils/PrismaClient";
-import { signAccess, verifyAccess, verifyRefresh } from "./jwtAuth";
+import { verifyAccess, verifyRefresh } from "./jwtAuth";
 import { JWT } from "../constant/cookie";
 import { extractTokens } from "../utils/extractTokens";
 

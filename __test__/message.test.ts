@@ -29,7 +29,7 @@ describe("message", () => {
   });
 
   describe("get", () => {
-    it("given from and to are passsed", async () => {
+    it("given from and to are passsed and returns all messages between from and to", async () => {
       // act
       const response = await request(app)
         .get(`/message/from/${SENDER.id}/to/${RECIEVER.id}`)
@@ -42,7 +42,7 @@ describe("message", () => {
       // assert
       const [date, messages] = response.body[0];
 
-      const isMessagesBetweenSenderAndReciever = (
+      const areAllMessagesBetweenSenderAndReciever = (
         messages as IMessages[]
       ).every((message) => {
         return (
@@ -52,10 +52,10 @@ describe("message", () => {
         );
       });
 
-      expect(isMessagesBetweenSenderAndReciever).toBe(true);
+      expect(areAllMessagesBetweenSenderAndReciever).toBe(true);
     });
 
-    it("given from and to are not passsed", async () => {
+    it("given from and to are not passsed and throws error message", async () => {
       // act
       const response = await request(app)
         .get(`/message/from/undefined/to/undefined`)
@@ -73,7 +73,7 @@ describe("message", () => {
   });
 
   describe("add", () => {
-    it("given from and to are and newMessage are passed", async () => {
+    it("given from and to are and newMessage are passed and check newMessage is added to DB", async () => {
       // arrange
       const newMessage = "안녕 난 짝돌이야";
 
@@ -104,7 +104,7 @@ describe("message", () => {
       expect(senderId).toBe(SENDER.id);
     });
 
-    it("given from and to are not passed", async () => {
+    it("given from and to are not passed and throws error message", async () => {
       // arrange
       const newMessage = "안녕 난 짝돌이야";
 

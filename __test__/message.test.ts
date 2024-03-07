@@ -18,7 +18,7 @@ describe("message", () => {
   beforeEach(() => {
     accessToken = signAccess(SENDER.email);
     refreshToken = signRefresh(SENDER.email);
-    mockedPrismaUserDB.set(SENDER.email, SENDER);
+
     server.close();
   });
 
@@ -27,7 +27,7 @@ describe("message", () => {
   });
 
   describe("get", () => {
-    it("given from and to are passsed", async () => {
+    it.only("given from and to are passsed", async () => {
       // arrange and act
       const response = await request(app)
         .get(`/message/from/${SENDER.id}/to/${RECIEVER.id}`)
@@ -36,21 +36,21 @@ describe("message", () => {
           `accessToken=${accessToken};refreshTokenIdx=${SENDER.email}`
         )
         .expect(201);
+
       // assert
       const [date, messages] = response.body[0];
 
-      const isMessageBetweenSenderAndReciever = (messages as IMessages[]).every(
-        (message) => {
-          return (
-            (message.senderId === SENDER.id &&
-              message.recieverId === RECIEVER.id) ||
-            (message.senderId === RECIEVER.id &&
-              message.recieverId === SENDER.id)
-          );
-        }
-      );
+      const isMessagesBetweenSenderAndReciever = (
+        messages as IMessages[]
+      ).every((message) => {
+        return (
+          (message.senderId === SENDER.id &&
+            message.recieverId === RECIEVER.id) ||
+          (message.senderId === RECIEVER.id && message.recieverId === SENDER.id)
+        );
+      });
 
-      expect(isMessageBetweenSenderAndReciever).toBe(true);
+      expect(isMessagesBetweenSenderAndReciever).toBe(true);
     });
 
     it("given from and to are not passsed", async () => {

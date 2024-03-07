@@ -71,6 +71,7 @@ describe("message", () => {
       expect(errMessage).toBe("from and to are required");
     });
   });
+
   describe("add", () => {
     it("given from and to are and newMessage are passed", async () => {
       // arrange
@@ -102,6 +103,7 @@ describe("message", () => {
       expect(recieverId).toBe(RECIEVER.id);
       expect(senderId).toBe(SENDER.id);
     });
+
     it("given from and to are not passed", async () => {
       // arrange
       const newMessage = "안녕 난 짝돌이야";
@@ -118,6 +120,7 @@ describe("message", () => {
         )
         .expect(401);
 
+      // assert
       const errMessage = response.body.message;
       expect(errMessage).toBe("sender, reciever and message are required");
     });

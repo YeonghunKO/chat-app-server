@@ -17,7 +17,7 @@ const config: Config = {
   testEnvironment: "node",
 
   // The glob patterns Jest uses to detect test files
-  testMatch: ["<rootDir>/__test__/**/auth.test.ts"],
+  testMatch: ["<rootDir>/__test__/**/**.test.ts"],
 };
 
 export default config;

@@ -28,10 +28,6 @@ describe("message", () => {
     server.close();
   });
 
-  afterEach(() => {
-    mockedPrismaMessagesDB.length = 0;
-  });
-
   describe("get", () => {
     it("given from and to are passsed", async () => {
       // act

@@ -18,7 +18,7 @@ _**아래는 기존코드에 문제점이 있다고 판단되어 개선하거나
   - A(arrange)A(act)A(assert) 구조로 테스트를 구분하고 주석처리하여 문서화 시켰습니다.
   - [socket테스트시](https://github.com/YeonghunKO/chat-app-server/blob/master/__test__/socket.test.ts), 단순 [계산로직](https://github.com/YeonghunKO/chat-app-server/blob/master/socket/user.ts#L7)과 액션(클라이언트에 직접적인 영향을 주는)을 구분하여 테스트 하였습니다.
   - 참고로, prisma를 모킹시 [공식문서](https://www.prisma.io/docs/orm/prisma-client/testing/unit-testing)를 통해 모킹방법이 나와있으나, `typeerror: .default is not a function` 에러를 해결하지 못하여 그냥 [직접 구현하였습니다](https://github.com/YeonghunKO/chat-app-server/blob/master/__test__/mock/prismaInstance.ts).
-  - 직접 모킹을 구현함으로써 일일이 구현을 해야하니 시간이 많이 든다는 단점이 있습니다. 그러나, 모킹 라이브러리에 종속되지 않아 디버깅이 쉽고, 코드 작성시 복잡성을 줄일 수 있다는 장점이 있습니다.
+  - 직접 모킹을 구현함으로써 일일이 구현을 해야하니 시간이 많이 든다는 단점이 있습니다. 그러나, 모킹 라이브러리에 종속되지 않아 디버깅이 쉽고, 코드 작성시 복잡성을 줄일 수 있다는 장점이 있습니다.
 * 현재 로그인한 유저를 class로 관리하였습니다.([onlineUsers](https://github.com/YeonghunKO/chat-app-server/blob/master/utils/onlineUser.ts))
 * jsonwebtokens를 이용해 인가를 적용했습니다.([jwtAuth](https://github.com/YeonghunKO/chat-app-server/blob/master/middleware/jwtAuth.ts))
   - 중요한 정보를 열람하는 api일 경우, 자원을 넘겨주기 전에 [validateToken](https://github.com/YeonghunKO/chat-app-server/blob/master/middleware/validateToken.ts)이라는 [middleware를 이용](https://github.com/YeonghunKO/chat-app-server/blob/master/index.ts#L41)하여 토큰 검증을 하였습니다.

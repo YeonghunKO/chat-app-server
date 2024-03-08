@@ -25,7 +25,7 @@ _**아래는 기존코드에 문제점이 있다고 판단되어 개선하거나
 * controller에서 발생하는 에러를 핸들링하였습니다.([errorHandle](https://github.com/YeonghunKO/chat-app-server/blob/master/utils/errorHandle.ts))
 * 날짜별로 메시지를 묶어서 프론트에 넘겨주었습니다([getMessages](https://github.com/YeonghunKO/chat-app-server/blob/master/controller/MessageController.ts#L81))
    - 이로써 프론트는 날짜별로 일일이 필터링 할 필요없어졌습니다.
-* uri 구조를 개선했습니다
+* uri 구조를 개선했습니다.
    - uri 안에 있는 있는 동사(ex> get-messages)는 [http method로 대신](https://github.com/YeonghunKO/chat-app-server/commit/a64971505fcab61c3c0ea72d71cc178518466e20)하였습니다.
   
 * oracle cloud에 배포하고 nginx + certbot을 이용해 ssl을 추가하였습니다. 
@@ -57,16 +57,16 @@ _**아래는 기존코드에 문제점이 있다고 판단되어 개선하거나
 
 ## 🔑 실행방법
 
-.env를 만들고 아래 환경변수를 추가합니다
+.env를 만들고 아래 환경변수를 추가합니다.
 
 ```cmd
-PORT = 80
-CLIENT_URL = http://localhost:3000
+PORT = 
+CLIENT_URL = 
 
-SCRETE_ACCESS = zzakdol
-SCRETE_REFRESH = gongnam
+SCRETE_ACCESS = 
+SCRETE_REFRESH = 
 
-DATABASE_URL="postgresql://postgres:koil132123451234@db.xpdqxuuljksmrjhubmtn.supabase.co:5432/postgres"
+DATABASE_URL= 
 ```
 
 

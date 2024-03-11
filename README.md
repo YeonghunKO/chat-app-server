@@ -52,7 +52,6 @@ _**아래는 기존코드에 문제점이 있다고 판단되어 개선하거나
 - [nginx란 도대체 뭐지?](https://velog.io/@yhko1992/nginx%EB%9E%80-%EB%8F%84%EB%8C%80%EC%B2%B4-%EB%AD%90%EC%A7%80)
 - [jwt로 토큰을 관리해보자!](https://velog.io/@yhko1992/express%EC%97%90%EC%84%9C-jwt%ED%86%A0%ED%81%B0-%EC%84%B8%ED%8C%85%ED%95%98%EA%B8%B0)
 - [ssh를 끄더라도 서버가 계속 돌아가게 하려면?](https://velog.io/@yhko1992/ssh%ED%84%B0%EB%AF%B8%EB%84%90%EC%9D%84-%EA%BB%90%EC%9D%84%EB%95%8C%EB%8F%84-%EC%84%9C%EB%B2%84%EA%B0%80-%EA%B3%84%EC%86%8D-%EB%8F%8C%EC%95%84%EA%B0%80%EA%B2%8C-%ED%95%98%EB%A0%A4%EB%A9%B4)
-- 
   
 
 ## 🔑 실행방법

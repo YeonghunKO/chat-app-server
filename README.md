@@ -15,6 +15,7 @@
 _**아래는 기존코드에 문제점이 있다고 판단되어 개선하거나 새롭게 추가한 사항들입니다.**_
 
 * jest, supertest, socket.io를 이용하여 [테스트 코드를 작성](https://github.com/YeonghunKO/chat-app-server/tree/master/__test__)하고 기능을 문서화 시켰습니다.
+  - 컴포넌트를 리팩토링해야하거나, 새로운 기능을 추가하고 나면 항상 원래 의도한대로 잘 작동하는지 수동으로 체크해야했습니다. 그러나, 테스트 코드를 작성하면 수동테스트가 자동화되면서 불필요한 작업을 최소화할 수 있게 되었습니다.
   - A(arrange)A(act)A(assert) 구조로 테스트를 구분하고 주석처리하여 문서화 시켰습니다.
   - [socket테스트시](https://github.com/YeonghunKO/chat-app-server/blob/master/__test__/socket.test.ts), 단순 [계산로직](https://github.com/YeonghunKO/chat-app-server/blob/master/socket/user.ts#L7)과 액션(클라이언트에 직접적인 영향을 주는)을 구분하여 테스트 하였습니다.
   - 참고로, prisma를 모킹시 [공식문서](https://www.prisma.io/docs/orm/prisma-client/testing/unit-testing)를 통해 모킹방법이 나와있으나, `typeerror: .default is not a function` 에러를 해결하지 못하여 그냥 [직접 구현하였습니다](https://github.com/YeonghunKO/chat-app-server/blob/master/__test__/mock/prismaInstance.ts).

@@ -23,12 +23,12 @@ _**아래는 기존코드에 문제점이 있다고 판단되어 개선하거나
 * 현재 로그인한 유저를 class로 관리하였습니다.([onlineUsers](https://github.com/YeonghunKO/chat-app-server/blob/master/utils/onlineUser.ts))
 * jsonwebtokens를 이용해 인가를 적용했습니다.([jwtAuth](https://github.com/YeonghunKO/chat-app-server/blob/master/middleware/jwtAuth.ts))
   - 중요한 정보를 열람하는 api일 경우, 자원을 넘겨주기 전에 [validateToken](https://github.com/YeonghunKO/chat-app-server/blob/master/middleware/validateToken.ts)이라는 [middleware를 이용](https://github.com/YeonghunKO/chat-app-server/blob/master/index.ts#L41)하여 토큰 검증을 하였습니다.
-* controller에서 발생하는 에러를 핸들링하였습니다.([errorHandle](https://github.com/YeonghunKO/chat-app-server/blob/master/utils/errorHandle.ts))
+  - 이로써, 쿠키에 토큰이 있는 유저만 정보를 열람 할 수 있게 되어 보안이 강화되었습니다.
 * 날짜별로 메시지를 묶어서 프론트에 넘겨주었습니다([getMessages](https://github.com/YeonghunKO/chat-app-server/blob/master/controller/MessageController.ts#L81))
-   - 이로써 프론트는 날짜별로 일일이 필터링 할 필요없어졌습니다.
+  - 이로써 프론트에서는 받은 데이터를 가공하지 않고 그대로 랜더링 할 수 있습니다.
+* controller에서 발생하는 에러를 핸들링하였습니다.([errorHandle](https://github.com/YeonghunKO/chat-app-server/blob/master/utils/errorHandle.ts))
 * uri 구조를 개선했습니다.
    - uri 안에 있는 있는 동사(ex> get-messages)는 [http method로 대신](https://github.com/YeonghunKO/chat-app-server/commit/a64971505fcab61c3c0ea72d71cc178518466e20)하였습니다.
-  
 * oracle cloud에 배포하고 nginx + certbot을 이용해 ssl을 추가하였습니다. 
 
 ## 🚀 배포

@@ -24,3 +24,7 @@ jobs:
         run: |
           echo $SCRETE_ACCESS
           echo $SCRETE_REFRESH
+      - name: npm install and test
+        run: |
+          npm install
+          run: npm test

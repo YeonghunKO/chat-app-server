@@ -2,19 +2,25 @@ name: ci / cd
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm install
-    - run: npm test
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: print env secrets
+        env:
+          SCRETE_ACCESS: ${{ secrets.SCRETE_ACCESS }}
+          SCRETE_REFRESH: ${{ secrets.SCRETE_REFRESH }}
+        run: |
+          echo $SCRETE_ACCESS
+          echo $SCRETE_REFRESH

@@ -5,7 +5,10 @@ on:
     branches: ["master"]
   pull_request:
     branches: ["master"]
-
+env:
+  SCRETE_ACCESS: ${{ vars.SCRETE_ACCESS }}
+  SCRETE_REFRESH: ${{ vars.SCRETE_REFRESH }}
+  PORT: ${{ vars.PORT }}
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -18,12 +21,14 @@ jobs:
           cache: "npm"
 
       - name: print env secrets
-        env:
-          SCRETE_ACCESS: ${{ secrets.SCRETE_ACCESS }}
-          SCRETE_REFRESH: ${{ secrets.SCRETE_REFRESH }}
+
         run: |
-          echo $SCRETE_ACCESS
-          echo $SCRETE_REFRESH
+          echo "vars ${{env.SCRETE_ACCESS}}"
+          echo "vars ${{env.SCRETE_REFRESH}}"
+          echo "vars ${{env.PORT}}"
+          echo "screte ${{secrets.SCRETE_ACCESS}}"
+          echo "screte ${{secrets.SCRETE_REFRESH}}"
+
       - name: npm install and test
         run: |
           npm install

@@ -11,6 +11,7 @@ env:
   PORT: ${{ vars.PORT }}
 jobs:
   test:
+    environment: Production
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

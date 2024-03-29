@@ -11,7 +11,6 @@ env:
   PORT: ${{ vars.PORT }}
 jobs:
   test:
-    environment: Production
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -20,17 +19,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-
-      - name: print env secrets
-
-        run: |
-          echo "vars ${{env.SCRETE_ACCESS}}"
-          echo "vars ${{env.SCRETE_REFRESH}}"
-          echo "vars ${{env.PORT}}"
-          echo "screte ${{secrets.SCRETE_ACCESS}}"
-          echo "screte ${{secrets.SCRETE_REFRESH}}"
-
       - name: npm install and test
         run: |
           npm install
           npm test
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: just test
+        run: echo "hello deployment"

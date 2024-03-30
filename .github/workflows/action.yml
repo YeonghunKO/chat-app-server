@@ -38,7 +38,9 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd chat-app-server/
-            git pull origin master
-            npm run build:prod
-            pm2 start dist/bundle.js
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            sudo git pull origin master
+            sudo npm run build:prod
+            pm2 restart dist/bundle.js
             echo "build compleleted✅"

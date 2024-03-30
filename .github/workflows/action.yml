@@ -41,7 +41,7 @@ jobs:
             cd chat-app-server/
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
-            node -v
+            npm -v
             whereis pm2
             sudo git pull origin master
             sudo npm run build:prod

@@ -38,4 +38,7 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd chat-app-server/
-            ls
+            git pull origin master
+            npm run build:prod
+            pm2 start dist/bundle.js
+            echo "build compleleted✅"

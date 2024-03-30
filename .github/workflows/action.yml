@@ -41,6 +41,6 @@ jobs:
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
             sudo git pull origin master
-            sudo npm run build:prod
+            sudo npm run build:prod --update-env
             pm2 restart dist/bundle.js
             echo "build compleleted✅"

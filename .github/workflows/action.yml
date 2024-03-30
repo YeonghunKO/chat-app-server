@@ -28,6 +28,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3.3.0
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -40,7 +41,9 @@ jobs:
             cd chat-app-server/
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
+            node -v
+            whereis pm2
             sudo git pull origin master
-            sudo npm run build:prod --update-env
-            pm2 restart dist/bundle.js
+            sudo npm run build:prod
+            pm2 restart dist/bundle.js --update-env
             echo "build compleleted✅"

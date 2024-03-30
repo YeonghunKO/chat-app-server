@@ -41,6 +41,8 @@ jobs:
             cd chat-app-server/
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
+            sudo ln -s "$NVM_DIR/versions/node/v17.9.1/bin/node" "/usr/local/bin/node"
+            sudo ln -s "$NVM_DIR/versions/node/v17.9.1/bin/npm" "/usr/local/bin/npm" 
             npm -v
             whereis pm2
             sudo git pull origin master

@@ -45,7 +45,7 @@ jobs:
             source ~/.nvm/nvm.sh
             sudo ln -s "$NVM_DIR/versions/node/v17.9.1/bin/node" "/usr/local/bin/node"
             sudo ln -s "$NVM_DIR/versions/node/v17.9.1/bin/npm" "/usr/local/bin/npm" 
-            sudo git pull origin master
-            sudo npm run build:prod
+            git pull origin master
+            npm run build:prod
             pm2 restart dist/bundle.js --update-env
             echo "build compleleted✅"
